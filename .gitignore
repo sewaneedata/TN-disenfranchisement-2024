@@ -7,5 +7,17 @@
 
 #hide the html files 
 **/*.html
-
+#This is for macs only 
 **/*.DS_Store
+#this ignores csv files
+**/*.csv
+# this ignores excel sheets
+**/*.xlsx
+# this ignores json files
+**/*.json
+# this ignores data base files
+**/*.db
+# this ignores Java Script files
+**/*.jS
+# this ignores Cascading Style Sheets
+**/*.css
