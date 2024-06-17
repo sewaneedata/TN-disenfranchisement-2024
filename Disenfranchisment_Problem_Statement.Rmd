@@ -11,6 +11,4 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 
-
-
 450,000 individuals in Tennessee are being deprived of their right to vote due to incarceration, disproportionately affecting Black voters. We are partnering with The Free the Vote Coalition and Free Hearts to determine which counties are the most affected by disenfranchisement. 
