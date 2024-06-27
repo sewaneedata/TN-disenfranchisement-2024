@@ -1,0 +1,11 @@
+#load in libraries
+library(sf)
+library(rnaturalearth)
+library(remotes)
+library(rnaturalearthhires)
+library(rnaturalearthdata)
+library(tmap)
+library(osmdata)
+library(tidycensus)
+library(dplyr)
+library(readr)
