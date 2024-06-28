@@ -11,8 +11,8 @@ library(dplyr)
 library(readr)
 
 # upload csv
-risk <- read_csv('census.csv')
-View(risk)
+census <- read_csv('census.csv')
+View(census)
 
 first_acs <- get_acs(geography = "tract",
                      state = "TN",
