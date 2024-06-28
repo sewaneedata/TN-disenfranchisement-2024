@@ -10,9 +10,6 @@ library(tidycensus)
 library(dplyr)
 library(readr)
 
-# set working directory
-setwd("C:/Users/kayla/OneDrive/Desktop/TN-disenfranchisement-2024/")
-
 # upload csv
 risk <- read_csv('census.csv')
 View(risk)
