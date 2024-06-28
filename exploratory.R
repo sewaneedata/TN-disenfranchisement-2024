@@ -9,3 +9,8 @@ library(osmdata)
 library(tidycensus)
 library(dplyr)
 library(readr)
+library(tidycensus)
+
+setwd("C:/Users/kayla/OneDrive/Desktop/TN-disenfranchisement-2024/")
+risk <- read_csv('census.csv')
+View(risk)
