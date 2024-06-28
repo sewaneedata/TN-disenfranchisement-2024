@@ -16,11 +16,11 @@ View(census)
 
 # create df with census tract data from acs
 # rename UniqueIDs
-first_acs <- get_acs(geography = "tract",
+acs <- get_acs(geography = "tract",
                      state = "TN",
-                     #county = "Hamilton",
+                     #county = all(),
                      variables = c(
-                       #poverty income
+                       #income in the past 12 months below poverty level
                        poverty_income = "B23024_002",
                        #white 
                        white = "B02001_002", #"B02003_003", #detailed race codes start here
@@ -41,9 +41,39 @@ first_acs <- get_acs(geography = "tract",
                        btwn35kand49999 = "B25122_053",
                        btwn50kand74999 = "B25122_070",
                        btwn75kand99999 = "B25122_087",
-                       over100k = "B25122_104"
+                       over100k = "B25122_104",
+                       #employment
+                       employed = "B23025_004",
+                       unemployed = "B23025_005"
                      ),
                      summary_var = "B01003_001",
                      year = 2022,
                      geometry = TRUE)
 
+# pivot to create columns with each variable for each unique census tract
+pivot_acs <- acs %>% 
+  select(-moe) %>% 
+  pivot_wider(names_from = variable, values_from = estimate)
+
+# heat map for income level below poverty line and unemployed population 
+tmap_mode("view")
+tm_shape(pivot_acs) +
+  tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE) 
+
+# # making map
+# acs$geometry
+# 
+# #from tmap; picture of tn, plots
+# tm_shape(acs) + 
+#   tm_polygons()
+# 
+# #OR
+# tmap_mode('view') 
+# tm_shape(acs) +
+#   tm_polygons(alpha = 0.3, id = 'NAME')
+# 
+# 
+# 
+# 
