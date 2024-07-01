@@ -72,17 +72,18 @@ View(votes)
 
 # in pivot_acs, delete ", Tennessee" and create a new column "County" from "NAME"
 pivot_acs <- pivot_acs %>%
-  mutate(County = gsub("County, Tennessee", "", NAME))
-print(pivot_acs)
+  mutate(County = gsub(" County, Tennessee", "", NAME), .after = NAME)
+View(pivot_acs)
 
 # in votes, create a new column "County"
-# Remove ", Tennessee" and create a new column "County" from "County:"
+# Remove ", Tennessee" and rename the column "County"
 votes <- votes %>%
-  mutate(County = (`County:`))
-print(votes)
+  rename(County = "County:")
+View(votes)
 
-#join columns by "County"
+# join df columns by "County"
 census_votes <- left_join(votes, pivot_acs, by = "County")
 View(census_votes)
+
 
 #arr_desc from poorest to richest voter turnout visualization 
