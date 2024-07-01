@@ -9,6 +9,7 @@ library(osmdata)
 library(tidycensus)
 library(dplyr)
 library(readr)
+library(tidyr)
 
 # upload census csv
 census <- read_csv('census.csv')
@@ -50,8 +51,9 @@ View(census)
 #                      year = 2022,
 #                      geometry = TRUE)
 
-# get data for all counties in tennessee
+# get data for all counties in Tennessee
 acs <- get_acs(geography = "county",
+               #geography = "tract",
                state = "TN",
                #county = all(),
                variables = c(
@@ -92,25 +94,11 @@ pivot_acs <- acs %>%
   pivot_wider(names_from = variable, values_from = estimate)
 
 # heat map for income level below poverty line and unemployed population 
-tmap_mode("view")
+tmap_mode("plot")
 tm_shape(pivot_acs) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
-
-# # making map
-# acs$geometry
-# 
-# #from tmap; picture of tn, plots
-# tm_shape(acs) + 
-#   tm_polygons()
-# 
-# #OR
-# tmap_mode('view') 
-# tm_shape(acs) +
-#   tm_polygons(alpha = 0.3, id = 'NAME')
-# 
-
 
 # upload tn voting by county csv
 # this comes from secretary of state for year 2022
@@ -120,7 +108,7 @@ View(votes)
 
 #create county: column in in pivot_acs and only keep county name
 pivot_acs <- pivot_acs %>% 
-  mutate 
+  mutate()
 
 #join columns by county:
 #arr_desc from poorest to richest voter turnout visualization 
