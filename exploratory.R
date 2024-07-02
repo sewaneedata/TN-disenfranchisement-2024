@@ -1,3 +1,6 @@
+# PURPOSE:
+# look at voter turnout amongst different income groups by county
+
 #load in libraries
 library(sf)
 library(rnaturalearth)
@@ -70,6 +73,12 @@ tm_shape(pivot_acs) +
 votes <- read_csv('tn_county_votes.csv')
 View(votes)
 
+# clean up votes
+votes <- votes %>% 
+  filter(!is.na(`County:`),
+         `County:` != 'Total:') %>% 
+  select(-'...9')
+
 # in pivot_acs, delete ", Tennessee" and create a new column "County" from "NAME"
 pivot_acs <- pivot_acs %>%
   mutate(County = gsub(" County, Tennessee", "", NAME), .after = NAME)
@@ -86,12 +95,14 @@ View(census_votes)
 
 # create income column 
 census_votes <- census_votes %>%
-  mutate(income = btwn10kand19999 +
-            btwn20kand34999 +
-            btwn35kand49999 +
-            btwn50kand74999 +
-            btwn75kand99999 +
-            over100k)
+  pivot_longer(cols = starts_with('btwn'),
+               values_to = 'income')
+  # mutate(income = btwn10kand19999 +
+  #           btwn20kand34999 +
+  #           btwn35kand49999 +
+  #           btwn50kand74999 +
+  #           btwn75kand99999 +
+  #           over100k)
 View(census_votes)
 
 # # Convert Income to a factor with specified order
