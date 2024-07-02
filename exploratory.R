@@ -186,6 +186,15 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
+# create the voter turnout category columns by combining values from the specified columns
+census_votes <- census_votes %>%
+  mutate(
+    low_turnout = 
+    middle_turnout = 
+    high_turnout = 
+  )
+View(census_votes)
+
 # heat map for voter turnout
 tmap_mode("view")
 tm_shape(census_votes) +
@@ -194,6 +203,10 @@ tm_shape(census_votes) +
   tm_facets(as.layers = TRUE) 
 
 
-
-
+#census_votes
+#create a column with the number of people in each income category
+#create a column with the percentage of people in each income category
+#create a column with the label of the highest percentage income category
+#create dataset that has county, income category, and voter turnout rate (keep as percent)
+  #plot average rates
 
