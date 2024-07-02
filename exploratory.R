@@ -84,16 +84,56 @@ View(votes)
 census_votes <- left_join(votes, pivot_acs, by = "County")
 View(census_votes)
 
-#arr_desc from poorest to richest voter turnout visualization 
+# create income column 
+census_votes <- census_votes %>%
+  mutate(income = btwn10kand19999 +
+            btwn20kand34999 +
+            btwn35kand49999 +
+            btwn50kand74999 +
+            btwn75kand99999 +
+            over100k)
+View(census_votes)
 
+# # Convert Income to a factor with specified order
+# census_votes <- census_votes %>%
+#   mutate(income = factor(income, ordered = TRUE))
+# View(census_votes)
 
+# arrange census_votes from poorest to richest voter turnout based on Income categories
+arranged_census_votes <- census_votes %>%
+  arrange(income)
+View(arranged_census_votes)
 
+# in order to make the next heat map sing census_votes, you must
+# determine the maximum length of the columns
+target_length <- max(sapply(census_votes, length))
+target_length
 
+# function to pad columns with NA to match target length
+pad_column <- function(income, target_length) {
+  length(income) <- target_length
+  return(income)
+}
 
+# apply the padding function to each column in the data frame
+census_votes_padded <- as.data.frame(lapply(census_votes, pad_column, target_length = target_length))
 
+# replace NA values with appropriate value (NA) if needed
+census_votes_padded[is.na(census_votes_padded)] <- NA
+# not NA, 0
+#census_votes_padded[is.na(census_votes_padded)] <- 0
 
+# view the padded data frame
+print(census_votes_padded)
+View(census_votes_padded)
 
+# convert dataframe into a sf type object
+census_votes_padded <- st_sf(census_votes_padded)
 
-
-
+# heat map for income and voter turnout
+tmap_mode("plot")
+tm_shape(census_votes_padded) +
+  tm_polygons(alpha = 0.8, col = c('income', 'Total Votes Cast:'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE) 
 
