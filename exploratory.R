@@ -195,18 +195,33 @@ View(census_votes)
 # heat map for number of people in each income category
 tmap_mode("view")
 tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('low_income_percent', 'middle_income_percent', 'high_income_percent'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
+
+# heat map for number of people in each income category
+tmap_mode("view")
+tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('low_income', 'middle_income', 'high_income'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# create the voter turnout category columns by combining values from the specified columns
-#census_votes <- census_votes %>%
-#  mutate(
-#    low_turnout = 
-#    middle_turnout = 
-#    high_turnout = 
-#  )
-#View(census_votes)
+# Convert the 'Voter Turnout:' column to numeric if it's not already
+census_votes <- census_votes %>%
+  mutate(`Voter Turnout:` = as.numeric(`Voter Turnout:`))
+
+# remove % sign from values in voter turnout
+census_votes <- census_votes %>%
+  mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`))
+View(census_votes)
+
+# create voter turnout in percentile intervals so they're not intervals of 2% each
+census_votes <- census_votes %>%
+  mutate(voter_turnout_interval = cut(`Voter Turnout:`, 
+                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00), 
+                                      labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                                      include.lowest = TRUE))
+View(census_votes)
 
 # heat map for voter turnout
 tmap_mode("view")
