@@ -206,18 +206,35 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# Convert the 'Voter Turnout:' column to numeric if it's not already
+# create a column with the label of the highest percentage income category
 census_votes <- census_votes %>%
-  mutate(`Voter Turnout:` = as.numeric(`Voter Turnout:`))
+  mutate(highest_income_cat = case_when(
+      low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
+      middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
+      high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"
+    )
+  )
+View(census_votes)
+
+# heat map for county income category majority
+tmap_mode("view")
+tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('highest_income_cat'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
 
 # remove % sign from values in voter turnout
 census_votes <- census_votes %>%
   mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`))
 View(census_votes)
 
+# convert the 'Voter Turnout:' column to numeric if it's not already
+census_votes <- census_votes %>%
+  mutate(`Voter Turnout (%):` = as.numeric(`Voter Turnout (%):`))
+
 # create voter turnout in percentile intervals so they're not intervals of 2% each
 census_votes <- census_votes %>%
-  mutate(voter_turnout_interval = cut(`Voter Turnout:`, 
+  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`, 
                                       breaks = c(0.00, 25.00, 50.00, 75.00, 100.00), 
                                       labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
                                       include.lowest = TRUE))
@@ -227,6 +244,13 @@ View(census_votes)
 tmap_mode("view")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE) 
+
+# heat map for voter turnout
+tmap_mode("view")
+tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
 
