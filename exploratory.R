@@ -178,6 +178,20 @@ census_votes <- census_votes %>%
   )
 View(census_votes)
 
+# total income household populations (no. of households), census
+census_votes <- census_votes %>% 
+  mutate(income_tally = low_income + middle_income + high_income)
+View(census_votes)
+
+# create columns with the percentage of people in each income category
+census_votes <- census_votes %>%
+  mutate(
+    low_income_percent = (low_income / income_tally) * 100,
+    middle_income_percent = (middle_income / income_tally) * 100,
+    high_income_percent = (high_income / income_tally) * 100
+  )
+View(census_votes)
+
 # heat map for number of people in each income category
 tmap_mode("view")
 tm_shape(census_votes) +
@@ -214,15 +228,21 @@ crime <- read_csv('tennessee.csv')
 View(crime)
 names(crime)
 
-# remove empty columns
+# remove empty columns and NAs
 crime <- crime %>% 
   select(-...13) %>% 
   select(-...14) %>% 
   select(-...15) %>% 
-  select(-...16)
+  select(-...16) %>% 
+  filter(!is.na(`Metropolitan/Nonmetropolitan`))
 View(crime)
 
-# remove NANs
-crime <- crime %>% 
-  filter(!is.na('Metropolitan/Nonmetropolitan'))
-View(crime)
+
+
+
+
+
+
+
+
+
