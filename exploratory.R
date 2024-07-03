@@ -218,6 +218,13 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
 
+# Plot average voter turnout rates by income category
+ggplot(census_votes, aes(x = highest_income_category, y = `Voter Turnout (%):`)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  labs(title = "Average Voter Turnout Rate by Highest Income Category",
+       x = "Highest Income Category",
+       y = "Average Voter Turnout Rate (%)") +
+  theme_minimal()
 
 #census_votes
 #create a column with the number of people in each income category
