@@ -54,7 +54,6 @@ acs <- get_acs(geography = "county",
                year = 2022,
                geometry = TRUE)
 
-
 # pivot to create columns with each variable for each unique census tract
 pivot_acs <- acs %>% 
   select(-moe) %>% 
@@ -187,13 +186,13 @@ tm_shape(census_votes) +
   tm_facets(as.layers = TRUE)
 
 # create the voter turnout category columns by combining values from the specified columns
-census_votes <- census_votes %>%
-  mutate(
-    low_turnout = 
-    middle_turnout = 
-    high_turnout = 
-  )
-View(census_votes)
+#census_votes <- census_votes %>%
+#  mutate(
+#    low_turnout = 
+#    middle_turnout = 
+#    high_turnout = 
+#  )
+#View(census_votes)
 
 # heat map for voter turnout
 tmap_mode("view")
@@ -210,3 +209,20 @@ tm_shape(census_votes) +
 #create dataset that has county, income category, and voter turnout rate (keep as percent)
   #plot average rates
 
+# read in crime csv
+crime <- read_csv('tennessee.csv')
+View(crime)
+names(crime)
+
+# remove empty columns
+crime <- crime %>% 
+  select(-...13) %>% 
+  select(-...14) %>% 
+  select(-...15) %>% 
+  select(-...16)
+View(crime)
+
+# remove NANs
+crime <- crime %>% 
+  filter(!is.na('Metropolitan/Nonmetropolitan'))
+View(crime)
