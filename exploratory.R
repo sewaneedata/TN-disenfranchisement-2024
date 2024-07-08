@@ -1,3 +1,5 @@
+
+
 # PURPOSE:
 # look at voter turnout amongst different income groups by county
 
@@ -26,7 +28,7 @@ acs <- get_acs(geography = "county",
                variables = c(
                  #income in the past 12 months below poverty level
                  poverty_income = "B23024_002",
-                 #white 
+                 #white
                  white = "B02001_002", #"B02003_003", #detailed race codes start here
                  #african american
                  afr_amr = "B02001_003", #"B02003_004",
@@ -55,16 +57,16 @@ acs <- get_acs(geography = "county",
                geometry = TRUE)
 
 # pivot to create columns with each variable for each unique census tract
-pivot_acs <- acs %>% 
-  select(-moe) %>% 
+pivot_acs <- acs %>%
+  select(-moe) %>%
   pivot_wider(names_from = variable, values_from = estimate)
 
-# heat map for income level below poverty line and unemployed population 
+# heat map for income level below poverty line and unemployed population
 tmap_mode("plot")
 tm_shape(pivot_acs) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE) 
+  tm_facets(as.layers = TRUE)
 
 # upload tn voting by county csv
 # this comes from secretary of state for year 2022
@@ -73,9 +75,9 @@ votes <- read_csv('tn_county_votes.csv')
 View(votes)
 
 # clean up votes
-votes <- votes %>% 
+votes <- votes %>%
   filter(!is.na(`County:`),
-         `County:` != 'Total:') %>% 
+         `County:` != 'Total:') %>%
   select(-'...9')
 
 # in pivot_acs, delete ", Tennessee" and create a new column "County" from "NAME"
@@ -92,15 +94,15 @@ View(votes)
 census_votes <- left_join(votes, pivot_acs, by = "County")
 View(census_votes)
 
-# create income column 
+# create income column
 # census_votes <- census_votes %>%
 #   pivot_longer(cols = starts_with('btwn'),
 #                values_to = 'income')
 # View(census_votes)
-        #PROBLEMS:
-          #turned btwn columns into new column, which means they're gone
-          #does not include under 10k and over 100k
-          #represents the number of people, not the number of people in each income group
+#PROBLEMS:
+#turned btwn columns into new column, which means they're gone
+#does not include under 10k and over 100k
+#represents the number of people, not the number of people in each income group
 
 # # Convert Income to a factor with specified order
 # census_votes <- census_votes %>%
@@ -115,12 +117,20 @@ View(census_votes)
 # convert dataframe into a sf type object
 census_votes <- st_sf(census_votes)
 
+#white, afr_amr, nativeamr, asian, pac_isl, otherrace
+#heat map for race
+tmap_mode("plot")
+tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('white', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
+
 #heat map for income
 tmap_mode("plot")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('lessthan10k', 'btwn10kand19999', 'btwn20kand34999', 'btwn35kand49999', 'btwn50kand74999', 'btwn75kand99999', 'over100k'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE) 
+  tm_facets(as.layers = TRUE)
 
 # #create income class conditions
 # census_votes <- census_votes %>%
@@ -143,7 +153,7 @@ census_votes <- census_votes %>%
 View(census_votes)
 
 # total income household populations (no. of households), census
-census_votes <- census_votes %>% 
+census_votes <- census_votes %>%
   mutate(income_tally = low_income + middle_income + high_income)
 View(census_votes)
 
@@ -173,10 +183,10 @@ tm_shape(census_votes) +
 # create a column with the label of the highest percentage income category
 census_votes <- census_votes %>%
   mutate(highest_income_cat = case_when(
-      low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
-      middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
-      high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"
-    )
+    low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
+    middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
+    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"
+  )
   )
 View(census_votes)
 
@@ -198,8 +208,8 @@ census_votes <- census_votes %>%
 
 # create voter turnout in percentile intervals so they're not intervals of 2% each
 census_votes <- census_votes %>%
-  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`, 
-                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00), 
+  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`,
+                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00),
                                       labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
                                       include.lowest = TRUE))
 View(census_votes)
@@ -209,18 +219,27 @@ tmap_mode("view")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE) 
+  tm_facets(as.layers = TRUE)
 
 # heat map for voter turnout
 tmap_mode("view")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE) 
+  tm_facets(as.layers = TRUE)
 
-# Plot average voter turnout rates by income category
-ggplot(census_votes, aes(x = highest_income_category, y = `Voter Turnout (%):`)) +
+# plot average voter turnout rates by income category via bar chart
+ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  labs(title = "Average Voter Turnout Rate by Highest Income Category",
+       x = "Highest Income Category",
+       y = "Average Voter Turnout Rate (%)") +
+  theme_minimal()
+
+# plot average voter turnout rates by income category via line graph
+ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+  geom_line() +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
        x = "Highest Income Category",
@@ -232,7 +251,7 @@ ggplot(census_votes, aes(x = highest_income_category, y = `Voter Turnout (%):`))
 #create a column with the percentage of people in each income category
 #create a column with the label of the highest percentage income category
 #create dataset that has county, income category, and voter turnout rate (keep as percent)
-  #plot average rates
+#plot average rates
 
 # read in crime csv
 crime <- read_csv('tennessee.csv')
@@ -240,16 +259,13 @@ View(crime)
 names(crime)
 
 # remove empty columns and NAs
-crime <- crime %>% 
-  select(-...13) %>% 
-  select(-...14) %>% 
-  select(-...15) %>% 
-  select(-...16) %>% 
+crime <- crime %>%
+  select(-...13) %>%
+  select(-...14) %>%
+  select(-...15) %>%
+  select(-...16) %>%
   filter(!is.na(`Metropolitan/Nonmetropolitan`))
 View(crime)
-
-
-
 
 
 
