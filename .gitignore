@@ -13,6 +13,7 @@
 **/*.csv
 # this ignores excel sheets
 **/*.xlsx
+**/*.xls
 # this ignores json files
 **/*.json
 # this ignores data base files
@@ -21,3 +22,5 @@
 **/*.jS
 # this ignores Cascading Style Sheets
 **/*.css
+# Ignoring the data folder
+data
