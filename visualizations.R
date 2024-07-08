@@ -17,7 +17,7 @@ library(ggplot2)
 
 
 # upload census csv
-census <- read_csv('census.csv')
+census <- read_csv('data/census.csv')
 View(census)
 
 # get data for all counties in Tennessee
@@ -74,7 +74,7 @@ View(pivot_acs)
 # upload tn voting by county csv
 # this comes from secretary of state for year 2022
 # add the link here
-votes <- read_csv('tn_county_votes.csv')
+votes <- read_csv('data/tn_county_votes.csv')
 View(votes)
 
 # clean up votes

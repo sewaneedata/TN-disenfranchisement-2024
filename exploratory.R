@@ -15,9 +15,10 @@ library(tidycensus)
 library(dplyr)
 library(readr)
 library(tidyr)
+library(tidyverse)
 
 # upload census csv
-census <- read_csv('census.csv')
+census <- read_csv('data/census.csv')
 View(census)
 
 # get data for all counties in Tennessee
@@ -71,7 +72,7 @@ tm_shape(pivot_acs) +
 # upload tn voting by county csv
 # this comes from secretary of state for year 2022
 # add the link here
-votes <- read_csv('tn_county_votes.csv')
+votes <- read_csv('data/tn_county_votes.csv')
 View(votes)
 
 # clean up votes
@@ -256,7 +257,7 @@ ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
 #plot average rates
 
 # read in crime csv
-crime <- read_csv('tennessee.csv')
+crime <- read_csv('data/tennessee.csv')
 View(crime)
 names(crime)
 
