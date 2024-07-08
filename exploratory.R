@@ -115,6 +115,14 @@ View(census_votes)
 # convert dataframe into a sf type object
 census_votes <- st_sf(census_votes)
 
+#white, afr_amr, nativeamr, asian, pac_isl, otherrace
+#heat map for race
+tmap_mode("plot")
+tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('white', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE) 
+
 #heat map for income
 tmap_mode("plot")
 tm_shape(census_votes) +
@@ -218,9 +226,18 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
 
-# Plot average voter turnout rates by income category
-ggplot(census_votes, aes(x = highest_income_category, y = `Voter Turnout (%):`)) +
+# plot average voter turnout rates by income category via bar chart
+ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  labs(title = "Average Voter Turnout Rate by Highest Income Category",
+       x = "Highest Income Category",
+       y = "Average Voter Turnout Rate (%)") +
+  theme_minimal()
+
+# plot average voter turnout rates by income category via line graph
+ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+  geom_line() +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
        x = "Highest Income Category",

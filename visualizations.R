@@ -10,6 +10,9 @@ library(tidycensus)
 library(dplyr)
 library(readr)
 library(tidyr)
+library(ggplot2)
+
+  # CENSUS
 
 # upload census csv
 census <- read_csv('census.csv')
@@ -62,6 +65,8 @@ pivot_acs <- pivot_acs %>%
   mutate(County = gsub(" County, Tennessee", "", NAME), .after = NAME)
 View(pivot_acs)
 
+  # VOTER TURNOUT
+
 # upload tn voting by county csv
 # this comes from secretary of state for year 2022
 # add the link here
@@ -79,12 +84,47 @@ votes <- votes %>%
   rename(County = "County:")
 View(votes)
 
+# remove % sign from values in voter turnout
+census_votes <- census_votes %>%
+  mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`))
+View(census_votes)
+
+# convert the 'Voter Turnout:' column to numeric if it's not already
+census_votes <- census_votes %>%
+  mutate(`Voter Turnout (%):` = as.numeric(`Voter Turnout (%):`))
+
+# create voter turnout in percentile intervals so they're not intervals of 2% each
+census_votes <- census_votes %>%
+  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`, 
+                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00), 
+                                      labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+                                      include.lowest = TRUE))
+View(census_votes)
+
+# heat map for voter turnout (specific percentage)
+tmap_mode("view")
+tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE) 
+
+# heat map for voter turnout (in percent groups)
+tmap_mode("view")
+tm_shape(census_votes) +
+  tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
+
+  # JOIN CENSUS & VOTER TURNOUT
+
 # join df columns by "County" to create census_votes
 census_votes <- left_join(votes, pivot_acs, by = "County")
 View(census_votes)
 
 # convert dataframe into a sf type object
 census_votes <- st_sf(census_votes)
+
+  # CENSUS (INCOME & EMPLOYMENT)
 
 # heat map for income level below poverty line and unemployed population 
 tmap_mode("plot")
@@ -100,10 +140,70 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
 
-# heat map for voter turnout
-tmap_mode("view")
+# create the income category columns by combining values from the specified columns
+census_votes <- census_votes %>%
+  mutate(
+    low_income = lessthan10k + btwn10kand19999 + btwn20kand34999,
+    middle_income = btwn35kand49999 + btwn50kand74999 + btwn75kand99999,
+    high_income = over100k
+  )
+View(census_votes)
+
+# total income household populations (no. of households), census
+census_votes <- census_votes %>% 
+  mutate(income_tally = low_income + middle_income + high_income)
+View(census_votes)
+
+# create columns with the percentage of people in each income category
+census_votes <- census_votes %>%
+  mutate(
+    low_income_percent = (low_income / income_tally) * 100,
+    middle_income_percent = (middle_income / income_tally) * 100,
+    high_income_percent = (high_income / income_tally) * 100
+  )
+View(census_votes)
+
+# create a column with the label of the highest percentage income category
+census_votes <- census_votes %>%
+  mutate(highest_income_cat = case_when(
+    low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
+    middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
+    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"
+  ))
+View(census_votes)
+
+  # CENSUS (RACE)
+
+#heat map for race
+tmap_mode("plot")
 tm_shape(census_votes) +
-  tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('white', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
+
+  # CENSUS & VOTER TURNOUT
+
+# plot average voter turnout rates by income category via bar chart
+ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  labs(title = "Average Voter Turnout Rate by Highest Income Category",
+       x = "Highest Income Category",
+       y = "Average Voter Turnout Rate (%)") +
+  theme_minimal()
+
+# plot average voter turnout rates by income category via bar chart
+ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+  geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+  labs(title = "Average Voter Turnout Rate by Highest Income Category",
+       x = "Highest Income Category",
+       y = "Average Voter Turnout Rate (%)") +
+  theme_minimal()
+
+
+
+
+
+
 
