@@ -270,6 +270,9 @@ View(crime)
 
 
 
+library(readxl)
+correction_data_2 <- read_excel("correction data 2.xlsx")
+View(correction_data_2)
 
-
-
+correction_data_1 <- read_excel("correction data 1.xlsx")
+View(correction_data_1)
