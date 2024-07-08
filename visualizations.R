@@ -12,7 +12,9 @@ library(readr)
 library(tidyr)
 library(ggplot2)
 
-# CENSUS
+
+  # CENSUS
+
 
 # upload census csv
 census <- read_csv('census.csv')
@@ -65,7 +67,9 @@ pivot_acs <- pivot_acs %>%
   mutate(County = gsub(" County, Tennessee", "", NAME), .after = NAME)
 View(pivot_acs)
 
-# VOTER TURNOUT
+
+  # VOTER TURNOUT
+
 
 # upload tn voting by county csv
 # this comes from secretary of state for year 2022
@@ -95,8 +99,10 @@ census_votes <- census_votes %>%
 
 # create voter turnout in percentile intervals so they're not intervals of 2% each
 census_votes <- census_votes %>%
-  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`,
-                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00),
+
+  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`, 
+                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00), 
+
                                       labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
                                       include.lowest = TRUE))
 View(census_votes)
@@ -106,7 +112,8 @@ tmap_mode("view")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+
+  tm_facets(as.layers = TRUE) 
 
 # heat map for voter turnout (in percent groups)
 tmap_mode("view")
@@ -115,7 +122,9 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# JOIN CENSUS & VOTER TURNOUT
+
+  # JOIN CENSUS & VOTER TURNOUT
+
 
 # join df columns by "County" to create census_votes
 census_votes <- left_join(votes, pivot_acs, by = "County")
@@ -124,9 +133,11 @@ View(census_votes)
 # convert dataframe into a sf type object
 census_votes <- st_sf(census_votes)
 
-# CENSUS (INCOME & EMPLOYMENT)
 
-# heat map for income level below poverty line and unemployed population
+  # CENSUS (INCOME & EMPLOYMENT)
+
+# heat map for income level below poverty line and unemployed population 
+
 tmap_mode("plot")
 tm_shape(pivot_acs) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
@@ -150,7 +161,8 @@ census_votes <- census_votes %>%
 View(census_votes)
 
 # total income household populations (no. of households), census
-census_votes <- census_votes %>%
+s <- census_votes %>% 
+
   mutate(income_tally = low_income + middle_income + high_income)
 View(census_votes)
 
@@ -172,7 +184,9 @@ census_votes <- census_votes %>%
   ))
 View(census_votes)
 
-# CENSUS (RACE)
+
+  # CENSUS (RACE)
+
 
 #heat map for race
 tmap_mode("plot")
@@ -181,10 +195,7 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# total people of color household populations (no. of households), census
-census_votes <- census_votes %>%
-  mutate(race_tally = white, afr_amr, nativeamr, asian, pac_isl, otherrace)
-View(census_votes)
+
 
 # total people of color household populations (no. of households), census
 census_votes <- census_votes %>%
@@ -200,7 +211,9 @@ census_votes <- census_votes %>%
   )
 View(census_votes)
 
-# CENSUS & VOTER TURNOUT
+
+  # CENSUS & VOTER TURNOUT
+
 
 # plot average voter turnout rates by income category via bar chart
 ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
@@ -211,11 +224,21 @@ ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
        y = "Average Voter Turnout Rate (%)") +
   theme_minimal()
 
-# plot average voter turnout rates by race via bar chart
+
+# plot average voter turnout rates by income category via bar chart
+
 ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
        x = "Highest Income Category",
        y = "Average Voter Turnout Rate (%)") +
+
   theme_minimal()
+
+
+
+
+
+
+

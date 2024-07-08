@@ -123,7 +123,9 @@ tmap_mode("plot")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('white', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+
+  tm_facets(as.layers = TRUE) 
+
 
 #heat map for income
 tmap_mode("plot")
