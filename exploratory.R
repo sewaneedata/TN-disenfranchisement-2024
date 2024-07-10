@@ -1,5 +1,3 @@
-
-
 # PURPOSE:
 # look at voter turnout amongst different income groups by county
 
@@ -16,6 +14,8 @@ library(dplyr)
 library(readr)
 library(tidyr)
 library(tidyverse)
+library(readxl)
+library(ggplot2)
 
 # upload census csv
 census <- read_csv('data/census.csv')
@@ -272,10 +272,47 @@ View(crime)
 
 
 
+# read in corrections csv
+  # todc statistical abstract 2022
+    # Average Sentence Length by Location as of June 30, 2022
+    # C/S/F refers to conspiracy/ solicitation/ facilitation
+    # Under 85%, a convicted defendant must serve min. of 85% of their sentence b4 eligible for parole
+# name <- read_excel("data/name.xlsx")
+corrections_data_1 <- read_csv("data/corrections1.csv")
+View(corrections_data_1)
+  # todc statistical abstract 2023
+    # Felon Population by County of Conviction as of June 30, 2022
+corrections_data_2 <- read_csv("data/corrections2.csv")
+View(corrections_data_2)
 
-library(readxl)
-correction_data_2 <- read_excel("correction data 2.xlsx")
-View(correction_data_2)
-
-correction_data_1 <- read_excel("correction data 1.xlsx")
-View(correction_data_1)
+# create the new column 'TDOC (%)' and remove '%' sign in tdoc, backup, local, systemwide
+corrections_data_2_clean <- corrections_data_2 %>%
+  mutate(`TDOC (%)` = gsub("%", "", `TDOC %`)) %>% 
+  mutate(`Backup (%)` = gsub("%", "", `Backup %`)) %>%
+  mutate(`Local (%)` = gsub("%", "", `Local %`)) %>%
+  mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`))
+View(corrections_data_2_clean)
+  
+# # find the position of the columns '___ %'
+# col_pos <- which(names(corrections_data_2_clean) == "TDOC %")
+# col_pos <- which(names(corrections_data_2_clean) == "Backup %")
+# col_pos <- which(names(corrections_data_2_clean) == "Local %")
+# col_pos <- which(names(corrections_data_2_clean) == "Systemwide %")
+# 
+# # reorder the columns to place '___(%)' next to '___ %'
+# corrections_data_2_clean <- corrections_data_2_clean %>%
+#   select(1:col_pos, `TDOC (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
+#   select(1:col_pos, `Backup (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
+#   select(1:col_pos, `Local (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
+#   select(1:col_pos, `Systemwide (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1))
+# View(corrections_data_2_clean)
+# 
+# # Insert new columns next to their corresponding original columns
+# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `TDOC (%)`, "TDOC %")
+# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Backup (%)`, "Backup %")
+# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Local (%)`, "Local %")
+# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Systemwide (%)`, "Systemwide %")
+# 
+# 
+# 
+# 
