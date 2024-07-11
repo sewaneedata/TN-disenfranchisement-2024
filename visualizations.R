@@ -119,11 +119,13 @@ tm_shape(census_votes_clean) +
   # CENSUS (INCOME & EMPLOYMENT)
 
 # heat map for income level below poverty line and unemployed population 
-tmap_mode("plot")
+tmap_mode("view")
 tm_shape(census_votes_clean) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
+
+# poverty income / unemployment percentage map [here]
 
 #heat map for income
 tmap_mode("plot")
@@ -153,6 +155,8 @@ census_votes_clean_category1 <- census_votes_clean %>%
   ))
 View(census_votes_clean_category1)
 
+#income category map [here]
+
   # CENSUS (RACE)
 
 #heat map for race
@@ -170,17 +174,19 @@ census_votes_clean_category2 <- census_votes_clean_category1 %>%
   mutate(poc_tally = sum(afr_amr, nativeamr, asian, pac_isl, otherrace)) %>%
   # total percent of color household populations (perc. of households), census
   mutate(poc_perc = poc_tally / race_tally) %>% 
+  # total percent of african american household populations (perc. of households), census
+  mutate(afr_amr_perc = afr_amr / race_tally) %>% 
   # plot average voter turnout rates by race via bar chart
   # reshape the data from wide to long format
   pivot_longer(cols = c(white_, afr_amr, nativeamr, asian, pac_isl, otherrace), 
                names_to = "race_code", 
-               values_to = "total_race_tally") %>% 
-  mutate(voter_race = )
+               values_to = "total_race_tally")
+  #mutate(voter_race = )
 View(census_votes_clean_category2)
 
 # # plot average voter turnout rates by race via bar chart
 # ggplot(census_votes, aes(x = race_tally, y = `Voter Turnout:`)) +
-#   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+#  
 #   labs(title = "Average Voter Turnout Rate by Racial Demographic",
 #        x = "Race",
 #        y = "Average Voter Turnout Rate (%)") +
@@ -226,10 +232,155 @@ ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
        y = "Average Voter Turnout Rate (%)") +
   theme_minimal()
 
+# SCATTERPLOTS
 
-# In counties where there's a higher proportion of people of color, is voter turnout higher/lower?
+avg_voter_turnout <- mean(census_votes_clean_category2$`Voter Turnout (%):`, na.rm = TRUE)
+print(avg_voter_turnout)
+#39.25526%
+
+ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout:`, y = poverty_income)) +
+  geom_point(color = "darkseagreen3")
+ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = low_income_perc)) +
+  geom_point(color = "darkseagreen3")
+ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = middle_income_perc)) +
+  geom_point(color = "darkseagreen3")
+ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = high_income_perc)) +
+  geom_point(color = "darkseagreen3")
+ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = highest_income_cat)) +
+  geom_point(color = "darkseagreen3")
+# if you're a low income category county, you're more likely to have a voter turnout rate that's higher   than average
+
+mod1 <- lm(`Voter Turnout (%):` ~ highest_income_cat, data = census_votes_clean_category2)
+summary(mod1)
+
+# in counties where there's a higher proportion of people of color, is voter turnout higher/lower?
+poc_vote <- cor(census_votes_clean_category2$poc_perc, census_votes_clean_category2$`Voter Turnout (%):`)
+print(poc_vote)
+  # -0.1256031, negative correlation
+
+# scatter plot of proportion of POC vs. voter turnout
+ggplot(census_votes_clean_category2, aes(x = poc_perc, y = `Voter Turnout (%):`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Proportion of People of Color vs. Voter Turnout",
+       x = "Proportion of People of Color",
+       y = "Voter Turnout (%)") +
+  theme_minimal()
+
+# in counties where there's a higher proportion of african americans, is voter turnout higher/lower?
+afr_amr_vote <- cor(census_votes_clean_category2$afr_amr_perc, census_votes_clean_category2$`Voter Turnout (%):`)
+print(afr_amr_vote)
+# -0.1111298, negative correlation
+
+# scatter plot of proportion of afr_amr vs. voter turnout
+ggplot(census_votes_clean_category2, aes(x = afr_amr_perc, y = `Voter Turnout (%):`)) +
+  geom_point() +
+  ylim(0,100) +
+  labs(title = "Proportion of African Americans vs. Voter Turnout",
+       subtitle = "in Tennessee Population by County",
+       x = "Proportion of African Americans to TN Population",
+       y = "Voter Turnout (%)",
+       caption = "1 point = 1 TN county
+       Correlation Coefficient Value: -0.1256031") +
+  theme_minimal()
+
+# bar chart of proportion of afr_amr vs. voter turnout
+ggplot(census_votes_clean_category2, aes(x = afr_amr_perc)) +
+  geom_histogram() +
+  #geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(title = "Proportion of African Americans in Population vs. Voter Turnout",
+       x = "Proportion of African Americans in Population",
+       y = "Voter Turnout (%)") +
+  theme_minimal()
+
+# create a third dataset that still has afr_amr from c1 but also has t_r_t from c2
+census_votes_clean_category3 <- census_votes_clean_category1 %>% 
+  group_by(County) %>% 
+  # total household populations (no. of households), census
+  mutate(race_tally = sum(white_, afr_amr, nativeamr, asian, pac_isl, otherrace)) %>%
+  # total people of color household populations (no. of households), census
+  mutate(poc_tally = sum(afr_amr, nativeamr, asian, pac_isl, otherrace)) %>%
+  # total percent of color household populations (perc. of households), census
+  mutate(poc_perc = poc_tally / race_tally) %>% 
+  # total percent of african american household populations (perc. of households), census
+  mutate(afr_amr_perc = afr_amr / race_tally)
+View(census_votes_clean_category3)
+
+# model using registered voters and number of voters:
+logistic <- census_votes_clean_category3 %>% 
+  mutate(nonvoters = `Registered Voters:` - `Total\nVotes Cast:`) %>%  
+  rename(voters = `Total\nVotes Cast:`) %>% 
+  mutate(black_pop = afr_amr / race_tally * 100) 
+
+# create dataset with the required columns
+logistic_df <- logistic %>%
+  select(voters, nonvoters, black_pop, highest_income_cat)
+
+# fit a logistic model
+fit <- glm(cbind(voters, nonvoters) ~ 1 + black_pop + highest_income_cat, family = "binomial", data = logistic_df)
+
+# check out the results
+summary(fit)
+     # Coefficients:
+     #   Estimate Std. Error
+     # (Intercept)                     -3.931e-01  1.790e-03
+     # black_pop                       -4.677e-03  5.583e-05
+     # highest_income_catmiddle income  1.349e-02  1.960e-03
+     # z value Pr(>|z|)    
+     # (Intercept)                     -219.637  < 2e-16 ***
+     #   black_pop                        -83.775  < 2e-16 ***
+     #   highest_income_catmiddle income    6.886 5.74e-12 ***
+  # The coefficient is -0.3931, which implies that in a hypothetical county where the percentage of Black population is zero and the income level is at the reference category (likely the highest income category), the log-odds of voter turnout is -0.3931. The z-value (-219.637) and the extremely small p-value (< 2e-16) indicate that the intercept is statistically significant.
+  # The coefficient for black_pop is -0.004677. This negative value indicates that as the percentage of the Black population in a county increases, the log-odds of voter turnout decrease. The z-value (-83.775) and the p-value (< 2e-16) suggest that this effect is statistically significant.
+  # The coefficient for the middle-income category relative to the highest income category is 0.01349. This positive value suggests that counties in the middle-income category have higher log-odds of voter turnout compared to the highest income category. The z-value (6.886) and the p-value (5.74e-12) indicate that this difference is statistically significant.
+
+    # Black Population: There is a significant negative relationship between the percentage of     Black population in a county and voter turnout. For every 1% increase in the Black             population, the log-odds of voter turnout decrease by approximately 0.004677.
+        # emphasize ratio
+    # Income Level: Counties categorized as middle-income have a significantly higher log-odds     of voter turnout compared to counties in the highest income category.
+    # Statistical Significance: All predictors in the model are statistically significant,         meaning their effects on voter turnout are unlikely to be due to chance.
+
+install.packages("sjPlot")
+library(sjPlot)
+tab_model(fit,
+          dv.labels = "Logistic Regression",
+          string.ci = "Conf. Int (95%)",
+          string.p = "P-Value")
+
+# Create a dataframe with predicted probabilities
+logistic_df2 <- logistic_df %>%
+  mutate(predicted_prob = predict(fit, type = "response"))
+
+# Plot predicted probabilities against black_population
+ggplot(logistic_df2, aes(x = black_pop, y = predicted_prob)) +
+  geom_point() +
+  geom_smooth(method = "loess", se = FALSE) +
+  labs(title = "Predicted Probability of Voter Turnout by Black Population",
+       x = "Percentage of Black Population",
+       y = "Predicted Probability of Voter Turnout") +
+  theme_minimal()
 
 
+# RESULTS
+# map crime and incarceration rates
+tmap_mode("plot")
+tm_shape(census_votes_clean_category2) +
+  tm_polygons(alpha = 0.8, col = c("correction_data_1","crime"), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
 
+# Plotting the map
+ggplot(data = census_votes, aes(x = census, y = census_votes, group = group, fill = crime)) +
+  geom_polygon (color = "black") +
+  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+                      na.value = "grey50", guide = "legend") +
+  labs(title = "Incarceration Rates by County") +
+  theme_minimal()
+#barchart Incarceration Rates by Felony
+ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
+  geom_bar(color = "blue") +
+  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+                      na.value = "grey50", guide = "legend") +
+  labs(title = "Incarceration Rates by Felony") +
+  theme_minimal()
 
-
+range(census_votes_clean_category2$`Voter Turnout:`)

@@ -150,8 +150,8 @@ tm_shape(census_votes) +
 census_votes <- census_votes %>%
   mutate(
     low_income = lessthan10k + btwn10kand19999 + btwn20kand34999,
-    middle_income = btwn35kand49999 + btwn50kand74999 + btwn75kand99999,
-    high_income = over100k
+    middle_income = btwn35kand49999 + btwn50kand74999,
+    high_income = btwn75kand99999 + over100k
   )
 View(census_votes)
 
@@ -262,15 +262,13 @@ View(crime)
 names(crime)
 
 # remove empty columns and NAs
-crime <- crime %>%
+crime_clean <- crime %>%
   select(-...13) %>%
   select(-...14) %>%
   select(-...15) %>%
   select(-...16) %>%
   filter(!is.na(`Metropolitan/Nonmetropolitan`))
-View(crime)
-
-
+View(crime_clean)
 
 # read in corrections csv
   # todc statistical abstract 2022
@@ -298,7 +296,7 @@ View(corrections_data_2_clean)
 # col_pos <- which(names(corrections_data_2_clean) == "Backup %")
 # col_pos <- which(names(corrections_data_2_clean) == "Local %")
 # col_pos <- which(names(corrections_data_2_clean) == "Systemwide %")
-# 
+
 # # reorder the columns to place '___(%)' next to '___ %'
 # corrections_data_2_clean <- corrections_data_2_clean %>%
 #   select(1:col_pos, `TDOC (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
@@ -306,13 +304,35 @@ View(corrections_data_2_clean)
 #   select(1:col_pos, `Local (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
 #   select(1:col_pos, `Systemwide (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1))
 # View(corrections_data_2_clean)
-# 
-# # Insert new columns next to their corresponding original columns
+
+# # insert new columns next to their corresponding original columns
 # corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `TDOC (%)`, "TDOC %")
 # corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Backup (%)`, "Backup %")
 # corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Local (%)`, "Local %")
 # corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Systemwide (%)`, "Systemwide %")
-# 
-# 
-# 
-# 
+
+
+# RESULTS
+
+# map crime and incarceration rates
+tmap_mode("plot")
+tm_shape(census_votes_clean_category2) +
+  tm_polygons(alpha = 0.8, col = c("corrections_data_1","crime"), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
+
+# Plotting the map
+ggplot(data = census_votes, aes(x = census, y = census_votes, group = group, fill = crime)) +
+  geom_polygon (color = "black") +
+  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+                      na.value = "grey50", guide = "legend") +
+  labs(title = "Incarceration Rates by County") +
+  theme_minimal()
+#barchart Incarceration Rates by Felony
+ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
+  geom_bar(color = "blue") +
+  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+                      na.value = "grey50", guide = "legend") +
+  labs(title = "Incarceration Rates by Felony") +
+  theme_minimal()
+
