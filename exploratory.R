@@ -1,5 +1,5 @@
 # PURPOSE:
-# look at voter turnout amongst different income groups by county
+# exploring our datasets to notice patterns 
 
 #load in libraries
 library(sf)
@@ -261,43 +261,78 @@ View(crime_clean)
     # C/S/F refers to conspiracy/ solicitation/ facilitation
     # 85% refers to legislation that states that a convicted defendant must serve minimum of 85% of       their sentence b4 eligible for parole
 # name <- read_excel("data/name.xlsx")
-corrections_data_1 <- read_csv("data/corrections1.csv")
-View(corrections_data_1)
+crime_type_inmate_numbers <- read_csv("data/corrections1.csv")
+View(crime_type_inmates)
   # todc statistical abstract 2023
     # felon population by county of conviction as of June 30, 2022
-corrections_data_2 <- read_csv("data/corrections2.csv")
-View(corrections_data_2)
+county_incarceration_numbers <- read_csv("data/corrections2.csv")
+View(county_incarceration_numbers)
 
+# create 'Offense Type' category column (violent/non-violent)
+crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
+  mutate( offense_category = 
+            ifelse(`Offense Type` %in% 
+            c( 'Murder', 'Forcible Sex Offense', 'Non-Forcible Sex
+               Offense', 'Forgery/Fraud'),  'violent', 'non-violent'  
+            ))
+View(crime_type_inmate_numbers_clean)
+                                         
 # create the new column 'TDOC (%)' and remove '%' sign in tdoc, backup, local, systemwide
-corrections_data_2_clean <- corrections_data_2 %>%
+county_incarceration_numbers_clean <- county_incarceration_numbers %>%
   mutate(`TDOC (%)` = gsub("%", "", `TDOC %`)) %>% 
   mutate(`Backup (%)` = gsub("%", "", `Backup %`)) %>%
   mutate(`Local (%)` = gsub("%", "", `Local %`)) %>%
   mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`))
 View(corrections_data_2_clean)
 
-# RESULTS
+# make offense type categorical (non-violent = 0, violent = 1) for visualization
+incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
+  select(offense_category, `TDOC Inhouse Inmates`, `TDOC Backup Inmates`, `Locally Sentenced Inmates`,`Statewide Inmates`) %>%
+  pivot_longer(!offense_category) %>%
+  group_by( offense_category ) %>%
+  summarize( total_inmates = sum(value) )
 
-# map crime and incarceration rates
-tmap_mode("plot")
-tm_shape(census_votes_clean_category2) +
-  tm_polygons(alpha = 0.8, col = c("corrections_data_1","crime_clean"), id = "NAME") +
-  # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+library(ggthemes)
+# create a bar graph that visualizes number of offenses per offense type
+violent_nonviolent <- ggplot(incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
+  geom_col(fill = 'orange') +
+  labs(title = "Incarceration by Felony",
+       x = "Violent or Non-Violent",
+       y = "Count") +
+  theme_fivethirtyeight() +  # Apply theme_fivethirtyeight
+  scale_x_discrete(labels = c("non-violent" = "Non-Violent", "violent" = "Violent"))
+print (violent_nonviolent)
 
-# plotting the map
-ggplot(data = census_votes_clean_category2, aes(x = census, y = census_votes, group = group, fill = crime)) +
-  geom_polygon (color = "black") +
-  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
-                      na.value = "grey50", guide = "legend") +
-  labs(title = "Incarceration Rates by County") +
-  theme_minimal()
 
-#bar chart for incarceration rates by felony
-ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
-  geom_bar(color = "blue") +
-  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
-                      na.value = "grey50", guide = "legend") +
-  labs(title = "Incarceration Rates by Felony") +
-  theme_minimal()
+# join df columns by "County" to create census_votes
+census_votes_corrections <- left_join(census_votes_clean_category2, county_incarceration_numbers_clean, by = "County")
+View(census_votes_corrections)
+
+
+
+
+# # RESULTS
+# 
+# # map crime and incarceration rates
+# tmap_mode("plot")
+# tm_shape(census_votes_clean_category2) +
+#   tm_polygons(alpha = 0.8, col = c("corrections_data_1","crime_clean"), id = "NAME") +
+#   # make several layered maps that you can toggle between
+#   tm_facets(as.layers = TRUE)
+# 
+# # plotting incarceration map
+# ggplot(data = census_votes_clean_category2, aes(x = census, y = census_votes, group = group, fill = crime)) +
+#   geom_polygon (color = "black") +
+#   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+#                       na.value = "grey50", guide = "legend") +
+#   labs(title = "Incarceration Rates by County") +
+#   theme_minimal()
+# 
+# #bar chart for incarceration rates by felony
+# ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
+#   geom_bar(color = "blue") +
+#   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+#                       na.value = "grey50", guide = "legend") +
+#   labs(title = "Incarceration Rates by Felony") +
+#   theme_minimal()
 
