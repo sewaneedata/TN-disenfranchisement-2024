@@ -18,10 +18,12 @@ library(readxl)
 library(ggplot2)
 
 # upload census csv
+# from us census bureau
 census <- read_csv('data/census.csv')
 View(census)
 
 # get data for all counties in Tennessee
+# choose which tracts to keep
 acs <- get_acs(geography = "county",
                #geography = "tract",
                state = "TN",
@@ -70,13 +72,12 @@ tm_shape(pivot_acs) +
   tm_facets(as.layers = TRUE)
 
 # upload tn voting by county csv
-# this comes from secretary of state for year 2022
-# add the link here
+# from secretary of state for year 2022
 votes <- read_csv('data/tn_county_votes.csv')
 View(votes)
 
-# clean up votes
-votes <- votes %>%
+# clean votes
+votes_clean <- votes %>%
   filter(!is.na(`County:`),
          `County:` != 'Total:') %>%
   select(-'...9')
@@ -87,12 +88,12 @@ pivot_acs <- pivot_acs %>%
 View(pivot_acs)
 
 # in votes, remove ", Tennessee" and rename the column "County"
-votes <- votes %>%
+votes_clean2 <- votes_clean %>%
   rename(County = "County:")
 View(votes)
 
 # join df columns by "County" to create census_votes
-census_votes <- left_join(votes, pivot_acs, by = "County")
+census_votes <- left_join(votes_clean2, pivot_acs, by = "County")
 View(census_votes)
 
 # create income column
@@ -101,14 +102,9 @@ View(census_votes)
 #                values_to = 'income')
 # View(census_votes)
 #PROBLEMS:
-#turned btwn columns into new column, which means they're gone
-#does not include under 10k and over 100k
-#represents the number of people, not the number of people in each income group
-
-# # Convert Income to a factor with specified order
-# census_votes <- census_votes %>%
-#   mutate(income = factor(income, ordered = TRUE))
-# View(census_votes)
+  #turned btwn columns into new column, which means they're gone
+  #does not include under 10k and over 100k
+  #represents the number of people, not the number of people in each income group
 
 # # arrange census_votes from poorest to richest voter turnout based on Income categories
 # arranged_census_votes <- census_votes %>%
@@ -118,35 +114,24 @@ View(census_votes)
 # convert dataframe into a sf type object
 census_votes <- st_sf(census_votes)
 
-#white, afr_amr, nativeamr, asian, pac_isl, otherrace
-#heat map for race
+# heat map for race
 tmap_mode("plot")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('white', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
   # make several layered maps that you can toggle between
-
   tm_facets(as.layers = TRUE) 
 
+# INCOME
 
-#heat map for income
+# heat map for income
 tmap_mode("plot")
 tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('lessthan10k', 'btwn10kand19999', 'btwn20kand34999', 'btwn35kand49999', 'btwn50kand74999', 'btwn75kand99999', 'over100k'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# #create income class conditions
-# census_votes <- census_votes %>%
-#   mutate(
-#     income_category = case_when(
-#       lessthan10k > 0 | btwn10kand19999 > 0 | btwn20kand34999 > 0 ~ "low income",
-#       btwn35kand49999 > 0 | btwn50kand74999 > 0 | btwn75kand99999 > 0 ~ "middle income",
-#       over100k > 0 ~ "high income"
-#     )
-#   )
-# View(census_votes)
-
 # create the income category columns by combining values from the specified columns
+# categories determined by literature estimates in review
 census_votes <- census_votes %>%
   mutate(
     low_income = lessthan10k + btwn10kand19999 + btwn20kand34999,
@@ -155,7 +140,7 @@ census_votes <- census_votes %>%
   )
 View(census_votes)
 
-# total income household populations (no. of households), census
+# total no. of households that have an income, census
 census_votes <- census_votes %>%
   mutate(income_tally = low_income + middle_income + high_income)
 View(census_votes)
@@ -183,14 +168,12 @@ tm_shape(census_votes) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# create a column with the label of the highest percentage income category
+# create a column with the label of the highest percentage income category for each county
 census_votes <- census_votes %>%
   mutate(highest_income_cat = case_when(
     low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
     middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
-    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"
-  )
-  )
+    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"))
 View(census_votes)
 
 # heat map for county income category majority
@@ -199,6 +182,15 @@ tm_shape(census_votes) +
   tm_polygons(alpha = 0.8, col = c('highest_income_cat'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
+
+#census_votes
+#create a column with the number of people in each income category
+#create a column with the percentage of people in each income category
+#create a column with the label of the highest percentage income category
+#create dataset that has county, income category, and voter turnout rate (keep as percent)
+#plot average rates
+
+# VOTER TURNOUT
 
 # remove % sign from values in voter turnout
 census_votes <- census_votes %>%
@@ -249,13 +241,6 @@ ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
        y = "Average Voter Turnout Rate (%)") +
   theme_minimal()
 
-#census_votes
-#create a column with the number of people in each income category
-#create a column with the percentage of people in each income category
-#create a column with the label of the highest percentage income category
-#create dataset that has county, income category, and voter turnout rate (keep as percent)
-#plot average rates
-
 # read in crime csv
 crime <- read_csv('data/tennessee.csv')
 View(crime)
@@ -272,14 +257,14 @@ View(crime_clean)
 
 # read in corrections csv
   # todc statistical abstract 2022
-    # Average Sentence Length by Location as of June 30, 2022
+    # average sentence length by location as of june 30, 2022
     # C/S/F refers to conspiracy/ solicitation/ facilitation
-    # Under 85%, a convicted defendant must serve min. of 85% of their sentence b4 eligible for parole
+    # 85% refers to legislation that states that a convicted defendant must serve minimum of 85% of       their sentence b4 eligible for parole
 # name <- read_excel("data/name.xlsx")
 corrections_data_1 <- read_csv("data/corrections1.csv")
 View(corrections_data_1)
   # todc statistical abstract 2023
-    # Felon Population by County of Conviction as of June 30, 2022
+    # felon population by county of conviction as of June 30, 2022
 corrections_data_2 <- read_csv("data/corrections2.csv")
 View(corrections_data_2)
 
@@ -290,45 +275,25 @@ corrections_data_2_clean <- corrections_data_2 %>%
   mutate(`Local (%)` = gsub("%", "", `Local %`)) %>%
   mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`))
 View(corrections_data_2_clean)
-  
-# # find the position of the columns '___ %'
-# col_pos <- which(names(corrections_data_2_clean) == "TDOC %")
-# col_pos <- which(names(corrections_data_2_clean) == "Backup %")
-# col_pos <- which(names(corrections_data_2_clean) == "Local %")
-# col_pos <- which(names(corrections_data_2_clean) == "Systemwide %")
-
-# # reorder the columns to place '___(%)' next to '___ %'
-# corrections_data_2_clean <- corrections_data_2_clean %>%
-#   select(1:col_pos, `TDOC (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
-#   select(1:col_pos, `Backup (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
-#   select(1:col_pos, `Local (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1)) %>%
-#   select(1:col_pos, `Systemwide (%)`, (col_pos + 1):(ncol(corrections_data_2_clean) - 1))
-# View(corrections_data_2_clean)
-
-# # insert new columns next to their corresponding original columns
-# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `TDOC (%)`, "TDOC %")
-# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Backup (%)`, "Backup %")
-# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Local (%)`, "Local %")
-# corrections_data_2_clean <- insert_column_after(corrections_data_2_clean, `Systemwide (%)`, "Systemwide %")
-
 
 # RESULTS
 
 # map crime and incarceration rates
 tmap_mode("plot")
 tm_shape(census_votes_clean_category2) +
-  tm_polygons(alpha = 0.8, col = c("corrections_data_1","crime"), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c("corrections_data_1","crime_clean"), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# Plotting the map
-ggplot(data = census_votes, aes(x = census, y = census_votes, group = group, fill = crime)) +
+# plotting the map
+ggplot(data = census_votes_clean_category2, aes(x = census, y = census_votes, group = group, fill = crime)) +
   geom_polygon (color = "black") +
   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
                       na.value = "grey50", guide = "legend") +
   labs(title = "Incarceration Rates by County") +
   theme_minimal()
-#barchart Incarceration Rates by Felony
+
+#bar chart for incarceration rates by felony
 ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
   geom_bar(color = "blue") +
   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
