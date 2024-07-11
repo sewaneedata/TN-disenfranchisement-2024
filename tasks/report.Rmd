@@ -1,0 +1,26 @@
+---
+title: "TN Disenfranchisement Final Report"
+author: "Kayla Ahrndt, Santana Etchison, Khalilah Karriem, Adri Silva and Joseph Thomas"
+date: "July 19, 2024"
+output: tufte::tufte_html
+---
+
+# Executive Summary
+
+## Purpose. 
+
+## Methods. 
+### Data Acquisition
+There is no standardized tracking system in place that houses county-level data on the number of disenfranchised individuals who are eligible to restore their voting rights. To circumvent this roadblock, we obtained an estimate of the number of people impacted by county and how it affects local elections. Then, we performed web scraping, data cleaning, and data exploration with visualizations to illustrate our findings. 
+
+
+### Dataset Merging
+We merged relevant datasets to create original ones, enabling us to approach our question from a fresh perspective beyond providing a single numerical answer. We merged the voter turnout data with the census data to analyze what demographics might influence voter turnout by county. 
+
+
+## Key Findings. 
+
+# Conclusion
+
+# Implications
+
