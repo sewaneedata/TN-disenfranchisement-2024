@@ -16,7 +16,7 @@ Project Organization:
 - Readme File: Included a README.md file describing the project, its purpose, setup instructions, dependencies, and any other relevant information.
 - Environment Setup: Created a separate environment using R to manage dependencies and ensure reproducibility.
 - Install Dependencies:  Our team listed the  required packages/libraries in a requirements DESCRIPTION (R) file. Install these dependencies using package managers such as install.packages()).
-- Script Organization: The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.).Add comments within our code to explain logic, functions, and complex operations. Using R to comment and document functions.
+- Script Organization: The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.). Add comments within our code to explain logic, functions, and complex operations. Using R to comment and document functions.
 - Data Handling: Ensured proper handling of data (importing, cleaning, transformation) within scripts. Store raw data in data/raw/ and cleaned data in data/processed/.
 - Execution: Run scripts sequentially and Implement error handling in R to manage unexpected errors and failures.
 - Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
