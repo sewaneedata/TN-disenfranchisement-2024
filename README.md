@@ -18,7 +18,7 @@ Project Organization:
 - Install Dependencies:  Our team listed the  required packages/libraries in a requirements DESCRIPTION (R) file. Install these dependencies using package managers such as install.packages()).
 - Script Organization: The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.).Add comments within our code to explain logic, functions, and complex operations. Using R to comment and document functions.
 - Data Handling: Ensured proper handling of data (importing, cleaning, transformation) within scripts. Store raw data in data/raw/ and cleaned data in data/processed/.
-- Execution: Run scripts sequentially and Implement error handling ( tryCatch() in R) to manage unexpected errors and failures.
+- Execution: Run scripts sequentially and Implement error handling in R to manage unexpected errors and failures.
 - Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
 - Reporting: Generate reports in PDF using  R Markdown for documenting findings, analysis, and insights.
 - Collaboration: Share code via  our repositorie GitHub for collaboration and feedback.
