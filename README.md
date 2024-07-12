@@ -20,7 +20,13 @@
     - ggplot2
     - sjPlot
 
-### 3. How to Use the Project 
+### 3. Project Organization 
+  - We created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation.  
+  - We created a separate environment using R to manage dependencies and ensure reproducibility.
+  - The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.). We added comments within our code to explain logic, functions, and complex operations. 
+  - We ensured proper handling of data (importing, cleaning, transformation) within scripts. Additionally, we stored raw data in data/raw/ and cleaned data in data/processed/.
+  - Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
+  - Add New Data
 
 ### 4. Credits
 ##### Project Partners
@@ -36,11 +42,6 @@
 - [Santana Etchison,](https://github.com/santanaetch) The University of the South C'27
 - [Adri Silva,](https://github.com/adri-elle-silva) The University of the South C'24
 
+### Add New Data
+
 ### Notes
-Project Organization:  
-  - Folder Structure: Created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation.  
-  - Environment Setup: Created a separate environment using R to manage dependencies and ensure reproducibility.
-  - Script Organization: The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.). Add comments within our code to explain logic, functions, and complex operations. Using R to comment and document functions.
-  - Data Handling: Ensured proper handling of data (importing, cleaning, transformation) within scripts. Store raw data in data/raw/ and cleaned data in data/processed/.
-  - Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
-  - Add New Data
