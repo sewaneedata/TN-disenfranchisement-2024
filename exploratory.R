@@ -106,17 +106,12 @@ View(census_votes)
   #does not include under 10k and over 100k
   #represents the number of people, not the number of people in each income group
 
-# # arrange census_votes from poorest to richest voter turnout based on Income categories
-# arranged_census_votes <- census_votes %>%
-#   arrange(income)
-# View(arranged_census_votes)
-
 # convert dataframe into a sf type object
-census_votes <- st_sf(census_votes)
+census_votes_sf <- st_sf(census_votes)
 
 # heat map for race
 tmap_mode("plot")
-tm_shape(census_votes) +
+tm_shape(census_votes_sf) +
   tm_polygons(alpha = 0.8, col = c('white', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -125,34 +120,24 @@ tm_shape(census_votes) +
 
 # heat map for income
 tmap_mode("plot")
-tm_shape(census_votes) +
+tm_shape(census_votes_sf) +
   tm_polygons(alpha = 0.8, col = c('lessthan10k', 'btwn10kand19999', 'btwn20kand34999', 'btwn35kand49999', 'btwn50kand74999', 'btwn75kand99999', 'over100k'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # create the income category columns by combining values from the specified columns
 # categories determined by literature estimates in review
-census_votes <- census_votes %>%
-  mutate(
-    low_income = lessthan10k + btwn10kand19999 + btwn20kand34999,
+census_votes_income <- census_votes_sf %>%
+  mutate(low_income = lessthan10k + btwn10kand19999 + btwn20kand34999,
     middle_income = btwn35kand49999 + btwn50kand74999,
-    high_income = btwn75kand99999 + over100k
-  )
-View(census_votes)
-
-# total no. of households that have an income, census
-census_votes <- census_votes %>%
-  mutate(income_tally = low_income + middle_income + high_income)
-View(census_votes)
-
-# create columns with the percentage of people in each income category
-census_votes <- census_votes %>%
-  mutate(
-    low_income_percent = (low_income / income_tally) * 100,
+    high_income = btwn75kand99999 + over100k) %>% 
+  # total no. of households that have an income, census
+  mutate(income_tally = low_income + middle_income + high_income) %>% 
+  # create columns with the percentage of people in each income category
+  mutate(low_income_percent = (low_income / income_tally) * 100,
     middle_income_percent = (middle_income / income_tally) * 100,
-    high_income_percent = (high_income / income_tally) * 100
-  )
-View(census_votes)
+    high_income_percent = (high_income / income_tally) * 100)
+View(census_votes_income)
 
 # heat map for number of people in each income category
 tmap_mode("view")
@@ -302,7 +287,6 @@ violent_nonviolent <- ggplot(incarceration_by_felony, aes(x = offense_category, 
   theme_fivethirtyeight() +  # Apply theme_fivethirtyeight
   scale_x_discrete(labels = c("non-violent" = "Non-Violent", "violent" = "Violent"))
 print (violent_nonviolent)
-
 
 # join df columns by "County" to create census_votes
 census_votes_corrections <- left_join(census_votes_clean_category2, county_incarceration_numbers_clean, by = "County")

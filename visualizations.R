@@ -66,8 +66,7 @@ View(pivot_acs)
   # VOTER TURNOUT
 
 # upload tn voting by county csv
-# this comes from secretary of state for year 2022
-# add the link here
+# from secretary of state for year 2022
 votes <- read_csv('data/tn_county_votes.csv')
 View(votes)
 
@@ -155,7 +154,12 @@ census_votes_clean_category1 <- census_votes_clean %>%
   ))
 View(census_votes_clean_category1)
 
-#income category map [here]
+#heat map for income category
+tmap_mode("plot")
+tm_shape(census_votes_clean) +
+  tm_polygons(alpha = 0.8, col = c('low_income_perc', 'middle_income_perc', 'high_income_perc'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE) 
 
   # CENSUS (RACE)
 
@@ -234,9 +238,10 @@ ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
 
 # SCATTERPLOTS
 
-avg_voter_turnout <- mean(census_votes_clean_category2$`Voter Turnout (%):`, na.rm = TRUE)
-print(avg_voter_turnout)
-#39.25526%
+mean(census_votes_clean_category2$`Voter Turnout (%):`)
+# 39.25526%
+range(census_votes_clean_category2$`Voter Turnout:`)
+# 29.27%, 48.35%
 
 ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout:`, y = poverty_income)) +
   geom_point(color = "darkseagreen3")
@@ -330,14 +335,6 @@ summary(fit)
      # (Intercept)                     -219.637  < 2e-16 ***
      #   black_pop                        -83.775  < 2e-16 ***
      #   highest_income_catmiddle income    6.886 5.74e-12 ***
-  # The coefficient is -0.3931, which implies that in a hypothetical county where the percentage of Black population is zero and the income level is at the reference category (likely the highest income category), the log-odds of voter turnout is -0.3931. The z-value (-219.637) and the extremely small p-value (< 2e-16) indicate that the intercept is statistically significant.
-  # The coefficient for black_pop is -0.004677. This negative value indicates that as the percentage of the Black population in a county increases, the log-odds of voter turnout decrease. The z-value (-83.775) and the p-value (< 2e-16) suggest that this effect is statistically significant.
-  # The coefficient for the middle-income category relative to the highest income category is 0.01349. This positive value suggests that counties in the middle-income category have higher log-odds of voter turnout compared to the highest income category. The z-value (6.886) and the p-value (5.74e-12) indicate that this difference is statistically significant.
-
-    # Black Population: There is a significant negative relationship between the percentage of     Black population in a county and voter turnout. For every 1% increase in the Black             population, the log-odds of voter turnout decrease by approximately 0.004677.
-        # emphasize ratio
-    # Income Level: Counties categorized as middle-income have a significantly higher log-odds     of voter turnout compared to counties in the highest income category.
-    # Statistical Significance: All predictors in the model are statistically significant,         meaning their effects on voter turnout are unlikely to be due to chance.
 
 install.packages("sjPlot")
 library(sjPlot)
@@ -345,12 +342,13 @@ tab_model(fit,
           dv.labels = "Logistic Regression",
           string.ci = "Conf. Int (95%)",
           string.p = "P-Value")
+  # no statistical significance
 
-# Create a dataframe with predicted probabilities
+# create a dataframe with predicted probabilities
 logistic_df2 <- logistic_df %>%
   mutate(predicted_prob = predict(fit, type = "response"))
 
-# Plot predicted probabilities against black_population
+# plot predicted probabilities against black_population
 ggplot(logistic_df2, aes(x = black_pop, y = predicted_prob)) +
   geom_point() +
   geom_smooth(method = "loess", se = FALSE) +
@@ -359,28 +357,26 @@ ggplot(logistic_df2, aes(x = black_pop, y = predicted_prob)) +
        y = "Predicted Probability of Voter Turnout") +
   theme_minimal()
 
-
 # RESULTS
-# map crime and incarceration rates
-tmap_mode("plot")
-tm_shape(census_votes_clean_category2) +
-  tm_polygons(alpha = 0.8, col = c("correction_data_1","crime"), id = "NAME") +
-  # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+# # map crime and incarceration rates
+# tmap_mode("plot")
+# tm_shape(census_votes_clean_category2) +
+#   tm_polygons(alpha = 0.8, col = c("correction_data_1","crime"), id = "NAME") +
+#   # make several layered maps that you can toggle between
+#   tm_facets(as.layers = TRUE)
+# 
+# # Plotting the map
+# ggplot(data = census_votes, aes(x = census, y = census_votes, group = group, fill = crime)) +
+#   geom_polygon (color = "black") +
+#   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+#                       na.value = "grey50", guide = "legend") +
+#   labs(title = "Incarceration Rates by County") +
+#   theme_minimal()
+# #barchart Incarceration Rates by Felony
+# ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
+#   geom_bar(color = "blue") +
+#   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
+#                       na.value = "grey50", guide = "legend") +
+#   labs(title = "Incarceration Rates by Felony") +
+#   theme_minimal()
 
-# Plotting the map
-ggplot(data = census_votes, aes(x = census, y = census_votes, group = group, fill = crime)) +
-  geom_polygon (color = "black") +
-  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
-                      na.value = "grey50", guide = "legend") +
-  labs(title = "Incarceration Rates by County") +
-  theme_minimal()
-#barchart Incarceration Rates by Felony
-ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
-  geom_bar(color = "blue") +
-  scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
-                      na.value = "grey50", guide = "legend") +
-  labs(title = "Incarceration Rates by Felony") +
-  theme_minimal()
-
-range(census_votes_clean_category2$`Voter Turnout:`)
