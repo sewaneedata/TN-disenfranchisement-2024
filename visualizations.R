@@ -156,7 +156,7 @@ View(census_votes_clean_category1)
 
 #heat map for income category
 tmap_mode("plot")
-tm_shape(census_votes_clean) +
+tm_shape(census_votes_clean_category1) +
   tm_polygons(alpha = 0.8, col = c('low_income_perc', 'middle_income_perc', 'high_income_perc'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -196,11 +196,11 @@ View(census_votes_clean_category2)
 #        y = "Average Voter Turnout Rate (%)") +
 #   theme_minimal()
 
-# calculate the average voter turnout rates by race
-avg_perc_voter_turnout_race <- census_votes_clean_category2 %>%
-  group_by(race_code) %>%
-  summarize(average_turnout = mean(`Voter Turnout (%):`, na.rm = TRUE))
-View(avg_perc_voter_turnout_race)
+# # calculate the average voter turnout rates by race
+# avg_perc_voter_turnout_race <- census_votes_clean_category2 %>%
+#   group_by(race_code) %>%
+#   summarize(average_turnout = mean(`Voter Turnout (%):`, na.rm = TRUE))
+# View(avg_perc_voter_turnout_race)
 
 # plot average voter turnout rates by race via bar chart
 ggplot(census_votes_clean_category2, aes(x = race_code, y = `Voter Turnout (%):`)) +
@@ -257,6 +257,8 @@ ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = h
 
 mod1 <- lm(`Voter Turnout (%):` ~ highest_income_cat, data = census_votes_clean_category2)
 summary(mod1)
+mod2 <- lm(`Voter Turnout (%):` ~ poverty_income, data = census_votes_clean_category2)
+summary(mod2)
 
 # in counties where there's a higher proportion of people of color, is voter turnout higher/lower?
 poc_vote <- cor(census_votes_clean_category2$poc_perc, census_votes_clean_category2$`Voter Turnout (%):`)

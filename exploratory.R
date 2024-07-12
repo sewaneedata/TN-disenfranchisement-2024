@@ -136,34 +136,31 @@ census_votes_income <- census_votes_sf %>%
   # create columns with the percentage of people in each income category
   mutate(low_income_percent = (low_income / income_tally) * 100,
     middle_income_percent = (middle_income / income_tally) * 100,
-    high_income_percent = (high_income / income_tally) * 100)
+    high_income_percent = (high_income / income_tally) * 100) %>% 
+  # create a column with the label of the highest percentage income category for each county
+  mutate(highest_income_cat = case_when(
+    low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
+    middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
+    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"))
 View(census_votes_income)
 
 # heat map for number of people in each income category
 tmap_mode("view")
-tm_shape(census_votes) +
+tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('low_income_percent', 'middle_income_percent', 'high_income_percent'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # heat map for number of people in each income category
 tmap_mode("view")
-tm_shape(census_votes) +
+tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('low_income', 'middle_income', 'high_income'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# create a column with the label of the highest percentage income category for each county
-census_votes <- census_votes %>%
-  mutate(highest_income_cat = case_when(
-    low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
-    middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
-    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"))
-View(census_votes)
-
 # heat map for county income category majority
 tmap_mode("view")
-tm_shape(census_votes) +
+tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('highest_income_cat'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -178,38 +175,33 @@ tm_shape(census_votes) +
 # VOTER TURNOUT
 
 # remove % sign from values in voter turnout
-census_votes <- census_votes %>%
-  mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`))
-View(census_votes)
-
-# convert the 'Voter Turnout:' column to numeric if it's not already
-census_votes <- census_votes %>%
-  mutate(`Voter Turnout (%):` = as.numeric(`Voter Turnout (%):`))
-
-# create voter turnout in percentile intervals so they're not intervals of 2% each
-census_votes <- census_votes %>%
+census_votes_income_turnout <- census_votes_income %>%
+  mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`)) %>% 
+  # convert the 'Voter Turnout:' column to numeric if it's not already
+  mutate(`Voter Turnout (%):` = as.numeric(`Voter Turnout (%):`)) %>% 
+  # create voter turnout in percentile intervals so they're not intervals of 2% each
   mutate(voter_turnout_interval = cut(`Voter Turnout (%):`,
                                       breaks = c(0.00, 25.00, 50.00, 75.00, 100.00),
                                       labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
                                       include.lowest = TRUE))
-View(census_votes)
+View(census_votes_income_turnout)
 
 # heat map for voter turnout
 tmap_mode("view")
-tm_shape(census_votes) +
+tm_shape(census_votes_income_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # heat map for voter turnout
 tmap_mode("view")
-tm_shape(census_votes) +
+tm_shape(census_votes_income_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # plot average voter turnout rates by income category via bar chart
-ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+ggplot(census_votes_income_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
@@ -218,7 +210,7 @@ ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   theme_minimal()
 
 # plot average voter turnout rates by income category via line graph
-ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+ggplot(census_votes_income_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_line() +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
@@ -240,7 +232,7 @@ crime_clean <- crime %>%
   filter(!is.na(`Metropolitan/Nonmetropolitan`))
 View(crime_clean)
 
-# read in corrections csv
+# read in corrections csvs
   # todc statistical abstract 2022
     # average sentence length by location as of june 30, 2022
     # C/S/F refers to conspiracy/ solicitation/ facilitation
@@ -255,20 +247,12 @@ View(county_incarceration_numbers)
 
 # create 'Offense Type' category column (violent/non-violent)
 crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
-  mutate( offense_category = 
+  mutate(offense_category = 
             ifelse(`Offense Type` %in% 
             c( 'Murder', 'Forcible Sex Offense', 'Non-Forcible Sex
                Offense', 'Forgery/Fraud'),  'violent', 'non-violent'  
             ))
 View(crime_type_inmate_numbers_clean)
-                                         
-# create the new column 'TDOC (%)' and remove '%' sign in tdoc, backup, local, systemwide
-county_incarceration_numbers_clean <- county_incarceration_numbers %>%
-  mutate(`TDOC (%)` = gsub("%", "", `TDOC %`)) %>% 
-  mutate(`Backup (%)` = gsub("%", "", `Backup %`)) %>%
-  mutate(`Local (%)` = gsub("%", "", `Local %`)) %>%
-  mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`))
-View(corrections_data_2_clean)
 
 # make offense type categorical (non-violent = 0, violent = 1) for visualization
 incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
@@ -279,7 +263,7 @@ incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
 
 library(ggthemes)
 # create a bar graph that visualizes number of offenses per offense type
-violent_nonviolent <- ggplot(incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
+ggplot(incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
   geom_col(fill = 'orange') +
   labs(title = "Incarceration by Felony",
        x = "Violent or Non-Violent",
@@ -288,12 +272,43 @@ violent_nonviolent <- ggplot(incarceration_by_felony, aes(x = offense_category, 
   scale_x_discrete(labels = c("non-violent" = "Non-Violent", "violent" = "Violent"))
 print (violent_nonviolent)
 
-# join df columns by "County" to create census_votes
-census_votes_corrections <- left_join(census_votes_clean_category2, county_incarceration_numbers_clean, by = "County")
+# create the new column 'TDOC (%)' and remove '%' sign in tdoc, backup, local, systemwide
+county_incarceration_numbers_clean <- county_incarceration_numbers %>%
+  mutate(`TDOC (%)` = gsub("%", "", `TDOC %`)) %>% 
+  mutate(`Backup (%)` = gsub("%", "", `Backup %`)) %>%
+  mutate(`Local (%)` = gsub("%", "", `Local %`)) %>%
+  mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`))
+View(county_incarceration_numbers_clean)
+
+# join census votes and incarceration by county columns by "County"
+census_votes_corrections <- left_join(census_votes_income_turnout, county_incarceration_numbers_clean, by = "County")
 View(census_votes_corrections)
 
+# heat map for incarceration (tdoc, backup, local)
+#tmap_mode("plot")
+tmap_mode("view")
+tm_shape(census_votes_corrections) +
+  #tm_polygons(alpha = 0.8, col = c('TDOC #', 'Backup #', 'Local #' ), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('TDOC #', 'Backup #'), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
 
+# heat map for incarceration (statewide today)
+tmap_mode("view")
+tm_shape(census_votes_corrections) +
+  tm_polygons(alpha = 0.8, col = c('Systemwide #' ), id = "NAME") +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
 
+#categorical voter turnout
+#how do these things p
+#the dependent variable (categorical or real voter turnout)
+#the independent/control variables (race (proportion) income unemployment)
+#partisanship (state or federal, congress)-- how many representatives come from each, what party
+  #tennessee legislature (makeup of parties)-- not congressional
+  #state senate and house makeup: 27 republicans 6 dems (senate), 75 republicans 24 dems (house)
+#dep: voter tunout
+#ind: race (prop), unemployment, poverty 
 
 # # RESULTS
 # 
