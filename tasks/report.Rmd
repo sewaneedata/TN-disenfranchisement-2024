@@ -7,9 +7,19 @@ output: tufte::tufte_html
 
 # Executive Summary
 
-## Purpose. 
+# Purpose
 
-## Methods. 
+
+An estimated 450,000 to 470,000 individuals in TN are being denied their right to vote due to incarceration, disproportionately affecting African American voters. 
+
+## Methods
+
+
+
+
+Analysis and Report
+In order to make our findings most useful for policymakers and legislators, we used R Markdown to incorporate our findings into the final deliverable for Dr. Sekou Franklin, a written report. Our analysis consisted of mapping data using choropleths to visualize trends as well as charting findings in tables. The written report is the most suitable format for presentation to legislators and policy makers.  
+
 ### Data Acquisition
 There is no standardized tracking system in place that houses county-level data on the number of disenfranchised individuals who are eligible to restore their voting rights. To circumvent this roadblock, we obtained an estimate of the number of people impacted by county and how it affects local elections. Then, we performed web scraping, data cleaning, and data exploration with visualizations to illustrate our findings. 
 
@@ -17,8 +27,21 @@ There is no standardized tracking system in place that houses county-level data 
 ### Dataset Merging
 We merged relevant datasets to create original ones, enabling us to approach our question from a fresh perspective beyond providing a single numerical answer. We merged the voter turnout data with the census data to analyze what demographics might influence voter turnout by county. 
 
+### Analysis
+In order to make our findings most useful for policymakers and legislators, we used R Markdown to incorporate our findings into the final deliverable for Dr. Sekou Franklin, a written report. Our analysis consisted of mapping data using choropleths to visualize trends as well as charting findings in tables. The written report is the most suitable format for presentation to legislators and policy makers.  
 
-## Key Findings. 
+## Key Findings
+
+We built the Tennessee county map (see Figure 1) to illustrate the patterns in the voter turnout and compare with the demographics of each county. Then, we charted the incarceration rate by felony type (see Figure 2) to get an estimate of the ratio of individuals who have the possibility of restoring their rights upon release versus those who do not. One of the most immediately apparent observations is that most people convicted of a felony are not due to violent crimes and thus could have their rights restored were it not for legal financial obligations (LFOs). 
+
+
+Figure 1. 
+![Voter Turnout](Rplot05.jpeg)
+
+Figure 2.
+
+![Incarceration By Felony](plot plotototroto.jpeg)
+
 
 # Conclusion
 
