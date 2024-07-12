@@ -12,7 +12,7 @@ Some of the challenges you faced and features you hope to implement in the futur
 
 ### 3. How to Use the Project
 Project Organization:
-*Folder Structure: Created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation. 
+#Folder Structure: Created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation. 
 *Readme File: Included a README.md file describing the project, its purpose, setup instructions, dependencies, and any other relevant information.
 *Environment Setup: Created a separate environment using R to manage dependencies and ensure reproducibility.
 *Install Dependencies:  Our team listed the  required packages/libraries in a requirements DESCRIPTION (R) file. Install these dependencies using package managers such as install.packages()).
