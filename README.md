@@ -12,17 +12,17 @@ Some of the challenges you faced and features you hope to implement in the futur
 
 ### 3. How to Use the Project
 Project Organization:
-#Folder Structure: Created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation. 
-*Readme File: Included a README.md file describing the project, its purpose, setup instructions, dependencies, and any other relevant information.
-*Environment Setup: Created a separate environment using R to manage dependencies and ensure reproducibility.
-*Install Dependencies:  Our team listed the  required packages/libraries in a requirements DESCRIPTION (R) file. Install these dependencies using package managers such as install.packages()).
-*Script Organization: The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.).Add comments within our code to explain logic, functions, and complex operations. Using Roxygen comments (R) to document functions.
-*Data Handling: Ensured proper handling of data (importing, cleaning, transformation) within scripts. Store raw data in data/raw/ and cleaned data in data/processed/.
-*Execution: Run scripts sequentially and Implement error handling ( tryCatch() in R) to manage unexpected errors and failures.
-*Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
-*Reporting: Generate reports in PDF using  R Markdown for documenting findings, analysis, and insights.
-*Collaboration: Share code via  our repositorie GitHub for collaboration and feedback.
-*Sharing Results: Share our results, reports, or dashboards with stakeholders using appropriate formats and platforms.
+-Folder Structure: Created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation. 
+-Readme File: Included a README.md file describing the project, its purpose, setup instructions, dependencies, and any other relevant information.
+-Environment Setup: Created a separate environment using R to manage dependencies and ensure reproducibility.
+-Install Dependencies:  Our team listed the  required packages/libraries in a requirements DESCRIPTION (R) file. Install these dependencies using package managers such as install.packages()).
+-Script Organization: The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.).Add comments within our code to explain logic, functions, and complex operations. Using Roxygen comments (R) to document functions.
+-Data Handling: Ensured proper handling of data (importing, cleaning, transformation) within scripts. Store raw data in data/raw/ and cleaned data in data/processed/.
+-Execution: Run scripts sequentially and Implement error handling ( tryCatch() in R) to manage unexpected errors and failures.
+-Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
+-Reporting: Generate reports in PDF using  R Markdown for documenting findings, analysis, and insights.
+-Collaboration: Share code via  our repositorie GitHub for collaboration and feedback.
+-Sharing Results: Share our results, reports, or dashboards with stakeholders using appropriate formats and platforms.
 
 
 
