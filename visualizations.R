@@ -1,16 +1,17 @@
 #load in libraries
 library(sf)
-library(rnaturalearth)
-library(remotes)
-library(rnaturalearthhires)
-library(rnaturalearthdata)
+# library(rnaturalearth)
+# library(remotes)
+# library(rnaturalearthhires)
+# library(rnaturalearthdata)
 library(tmap)
-library(osmdata)
+# library(osmdata)
 library(tidycensus)
-library(dplyr)
-library(readr)
-library(tidyr)
-library(ggplot2)
+# library(dplyr)
+# library(readr)
+# library(tidyr)
+# library(ggplot2)
+library(tidyverse)
 
   # CENSUS
 
@@ -338,7 +339,7 @@ summary(fit)
      #   black_pop                        -83.775  < 2e-16 ***
      #   highest_income_catmiddle income    6.886 5.74e-12 ***
 
-install.packages("sjPlot")
+# install.packages("sjPlot")
 library(sjPlot)
 tab_model(fit,
           dv.labels = "Logistic Regression",
