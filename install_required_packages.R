@@ -6,7 +6,7 @@ required_packages <- c(
   "ggthemes",
   "sf",
   # "rnaturalearth",
-  # "remotes",
+  "remotes",
   # "rnaturalearthhires", # This one gave an error trying to install: "Error: package
   #                         'rnaturalearthhires' is not available". It's fixed below.
   # "rnaturalearthdata",
