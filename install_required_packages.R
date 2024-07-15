@@ -2,21 +2,23 @@
 # before running the rest of the scripts.
 
 required_packages <- c(
+  "tidyverse",
+  "ggthemes",
   "sf",
-  "rnaturalearth",
-  "remotes",
-  # This one gave an error trying to install: "Error: package 'rnaturalearthhires' is not available"
-  # The line at the bottom installs it using GitHub.
-  # "rnaturalearthhires",
-  "rnaturalearthdata",
+  # "rnaturalearth",
+  # "remotes",
+  # "rnaturalearthhires", # This one gave an error trying to install: "Error: package
+  #                         'rnaturalearthhires' is not available". It's fixed below.
+  # "rnaturalearthdata",
   "tmap",
-  "osmdata",
+  # "osmdata",
   "tidycensus",
-  "dplyr",
-  "readr",
-  "tidyr",
-  "ggplot2",
-  "sjPlot"
+  # "dplyr",
+  # "readr",
+  # "tidyr",
+  # "ggplot2",
+  "sjPlot",
+  "tufte"
 )
 
 # Must type 'Y' in the console and hit enter when asked "Do you want to proceed? [Y/n]:"
