@@ -6,19 +6,14 @@ output: tufte::tufte_html
 ---
 
 # Executive Summary
-The purpose of this report is to give the client an deep insight into the various processes we went through throughout creating this project. This report will cover our purpose for this project, the methods we used, what we did with the data, a data analysis key findings, figures, and what we've concluded from all the data we've compiled.
+The purpose of this report is to give the client an deep insight into the various processes we went through throughout creating this project. This report will cover our purpose for this research project, the methods we used, what we did with the data, a data analysis key findings, figures, and what we've concluded from all the data we've compiled. With our findings, we will be able to help many with the task of combating disenfranchisement. 
 
 # Purpose
-
 
 An estimated 450,000 to 470,000 individuals in TN are being denied their right to vote due to incarceration, disproportionately affecting African American voters. Our purpose is to determine how many individuals are disenfranchised, specifically in each county in the state of Tennessee. 
 
 ## Methods
 
-
-
-
-Analysis and Report
 In order to make our findings most useful for policymakers and legislators, we used R Markdown to incorporate our findings into the final deliverable for Dr. Sekou Franklin, a written report. Our analysis consisted of mapping data using choropleths to visualize trends as well as charting findings in tables. The written report is the most suitable format for presentation to legislators and policy makers.  
 
 ### Data Acquisition
