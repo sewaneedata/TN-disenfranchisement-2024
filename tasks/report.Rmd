@@ -6,7 +6,7 @@ output: tufte::tufte_html
 ---
 
 # Executive Summary
-The purpose of this report is to give the client an deep insight into the various processes we went through throughout creating this project. This report will cover our purpose for this research project, the methods we used, what we did with the data, a data analysis key findings, figures, and what we've concluded from all the data we've compiled. With our findings, we will be able to help many with the task of combating disenfranchisement. 
+The purpose of this report is to give the client in-depth insight into the various processes we went through throughout creating this project. This report will cover our purpose for this research project, the methods we used, what we did with the data, the data analysis, key findings, figures, and what we've concluded from all the data we've compiled. With our findings, we will be able to help many with the task of combating disenfranchisement. 
 
 # Purpose
 
@@ -14,17 +14,21 @@ An estimated 450,000 to 470,000 individuals in TN are being denied their right t
 
 ## Methods
 
-In order to make our findings most useful for policymakers and legislators, we used R Markdown to incorporate our findings into the final deliverable for Dr. Sekou Franklin, a written report. Our analysis consisted of mapping data using choropleths to visualize trends as well as charting findings in tables. The written report is the most suitable format for presentation to legislators and policy makers.  
+In order to make our findings most useful for policymakers and legislators, we used `RMarkdown` to create a written report with our findings for Dr. Sekou Franklin. Our analysis consisted of making choropleths to visualize trends as well as creating charts and tables, which is the most suitable format for  legislators and policy makers.  
 
 ### Data Acquisition
-There is no standardized tracking system in place that houses county-level data on the number of disenfranchised individuals who are eligible to restore their voting rights. To circumvent this roadblock, we obtained an estimate of the number of people impacted by county and how it affects local elections. Then, we performed web scraping, data cleaning, and data exploration with visualizations to illustrate our findings. 
+There is no standardized tracking system in place that houses county-level data on the number of disenfranchised individuals who are eligible to restore their voting rights. To circumvent this roadblock, we obtained an estimate of the number of people impacted by county and how it affects local elections by scouring the internet. We performed web scraping, data cleaning, and data exploration to obtain the appropriate datasets. 
+
+what are the datasets and where come from
 
 
 ### Dataset Merging
 We merged relevant datasets to create original ones, enabling us to approach our question from a fresh perspective beyond providing a single numerical answer. We merged the voter turnout data with the census data to analyze what demographics might influence voter turnout by county. 
 
+specifically what did you merge together
+
 ### Analysis
-In order to make our findings most useful for policymakers and legislators, we used R Markdown to incorporate our findings into the final deliverable for Dr. Sekou Franklin, a written report. Our analysis consisted of mapping data using choropleths to visualize trends as well as charting findings in tables. The written report is the most suitable format for presentation to legislators and policy makers.  
+In order to make our findings most useful for policymakers and legislators, we used `RMarkdown` to incorporate our findings into the final deliverable for Dr. Sekou Franklin, a written report. Our analysis consisted of mapping data using choropleths to visualize trends as well as charting findings in tables. The written report is the most suitable format for presentation to legislators and policy makers.  
 
 ## Key Findings
 
@@ -52,6 +56,13 @@ This plot shows that in the state of Tennessee, voter turnout by county varies f
 ![Logistic Regression](tfdr2 (1).jpg){width=70%}
 
 This chart compares...
+
+
+
+![Highest Income by Category by County](Web capture_16-7-2024_144557_.jpeg)
+this map shows...
+
+
 
 
 # Conclusion
