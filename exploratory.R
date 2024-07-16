@@ -1,6 +1,9 @@
 # PURPOSE:
 # exploring our datasets to notice patterns 
 
+#rank by potential voter turnout impact?
+#clairify by no. convictions in a county
+
 #load in libraries
 library(sf)
 library(rnaturalearth)
@@ -277,7 +280,9 @@ county_incarceration_numbers_clean <- county_incarceration_numbers %>%
   mutate(`TDOC (%)` = gsub("%", "", `TDOC %`)) %>% 
   mutate(`Backup (%)` = gsub("%", "", `Backup %`)) %>%
   mutate(`Local (%)` = gsub("%", "", `Local %`)) %>%
-  mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`))
+  mutate(`Systemwide (%)` = gsub("%", "", `Systemwide %`)) %>% 
+  group_by(`County`) %>% 
+  mutate(`Total #` = sum(`TDOC #` + `Backup #` + `Local #` + `Systemwide #`))
 View(county_incarceration_numbers_clean)
 
 # join census votes and incarceration by county columns by "County"
@@ -299,6 +304,14 @@ tm_shape(census_votes_corrections) +
   tm_polygons(alpha = 0.8, col = c('Systemwide #' ), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
+
+# trying new models to find results!
+
+#multiple regression
+#fit <- lm(voter_turnout ~ total_county_incarceration + income + race + employment, data = your_data)
+#fit <- lm(`Voter Turnout (%)` ~ `Total #` + `highest_income_cat` + race + employment, data = your_data)
+#summary(fit)
+
 
 #categorical voter turnout
 #how do these things p

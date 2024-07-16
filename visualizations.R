@@ -359,6 +359,8 @@ ggplot(logistic_df2, aes(x = black_pop, y = predicted_prob)) +
        y = "Predicted Probability of Voter Turnout") +
   theme_minimal()
 
+
+
 # RESULTS
 # # map crime and incarceration rates
 # tmap_mode("plot")
