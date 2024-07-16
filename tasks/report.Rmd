@@ -5,8 +5,8 @@ date: "July 19, 2024"
 output: tufte::tufte_html
 ---
 
-
 # Executive Summary
+The purpose of this report is to give the client an deep insight into the various processes we went through throughout creating this project. This report will cover our purpose for this project, the methods we used, what we did with the data, a data analysis key findings, figures, and what we've concluded from all the data we've compiled.
 
 # Purpose
 
@@ -62,4 +62,3 @@ Although the data on disenfranchisement is bare, the impact of our research is s
 
 
 # Implications
-What we've found is....?
