@@ -6,29 +6,28 @@
 
 #load in libraries
 library(sf)
-library(rnaturalearth)
-library(remotes)
-library(rnaturalearthhires)
-library(rnaturalearthdata)
+# library(rnaturalearth)
+# library(remotes)
+# library(rnaturalearthhires)
+# library(rnaturalearthdata)
 library(tmap)
-library(osmdata)
+# library(osmdata)
 library(tidycensus)
-library(dplyr)
-library(readr)
-library(tidyr)
+# library(dplyr)
+# library(readr)
+# library(tidyr)
 library(tidyverse)
-library(readxl)
-library(ggplot2)
+# library(readxl)
+# library(ggplot2)
 
 # upload census csv
-# from us census bureau
 census <- read_csv('data/census.csv')
 View(census)
 
 # get data for all counties in Tennessee
 # choose which tracts to keep
 acs <- get_acs(geography = "county",
-               #geography = "tract",
+               # geography = "tract",
                state = "TN",
                #county = all(),
                variables = c(
@@ -164,9 +163,9 @@ tm_shape(census_votes_income) +
 # heat map for county income category majority
 tmap_mode("view")
 tm_shape(census_votes_income) +
-  tm_polygons(alpha = 0.8, col = c('highest_income_cat'), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('highest_income_cat'), id = "NAME") # +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+  # tm_facets(as.layers = TRUE)
 
 #census_votes
 #create a column with the number of people in each income category
@@ -192,16 +191,16 @@ View(census_votes_income_turnout)
 # heat map for voter turnout
 tmap_mode("view")
 tm_shape(census_votes_income_turnout) +
-  tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") # +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+  # tm_facets(as.layers = TRUE)
 
 # heat map for voter turnout
 tmap_mode("view")
 tm_shape(census_votes_income_turnout) +
-  tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") # +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+  # tm_facets(as.layers = TRUE)
 
 # plot average voter turnout rates by income category via bar chart
 ggplot(census_votes_income_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
@@ -213,13 +212,13 @@ ggplot(census_votes_income_turnout, aes(x = highest_income_cat, y = `Voter Turno
   theme_minimal()
 
 # plot average voter turnout rates by income category via line graph
-ggplot(census_votes_income_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
-  geom_line() +
-  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
-  labs(title = "Average Voter Turnout Rate by Highest Income Category",
-       x = "Highest Income Category",
-       y = "Average Voter Turnout Rate (%)") +
-  theme_minimal()
+# ggplot(census_votes_income_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+#   geom_line() +
+#   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
+#   labs(title = "Average Voter Turnout Rate by Highest Income Category",
+#        x = "Highest Income Category",
+#        y = "Average Voter Turnout Rate (%)") +
+#   theme_minimal()
 
 # read in crime csv
 crime <- read_csv('data/tennessee.csv')
@@ -242,7 +241,7 @@ View(crime_clean)
     # 85% refers to legislation that states that a convicted defendant must serve minimum of 85% of       their sentence b4 eligible for parole
 # name <- read_excel("data/name.xlsx")
 crime_type_inmate_numbers <- read_csv("data/corrections1.csv")
-View(crime_type_inmates)
+View(crime_type_inmate_numbers)
   # todc statistical abstract 2023
     # felon population by county of conviction as of June 30, 2022
 county_incarceration_numbers <- read_csv("data/corrections2.csv")
@@ -273,7 +272,7 @@ ggplot(incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
        y = "Count") +
   theme_fivethirtyeight() +  # Apply theme_fivethirtyeight
   scale_x_discrete(labels = c("non-violent" = "Non-Violent", "violent" = "Violent"))
-print (violent_nonviolent)
+# print (violent_nonviolent)
 
 # create the new column 'TDOC (%)' and remove '%' sign in tdoc, backup, local, systemwide
 county_incarceration_numbers_clean <- county_incarceration_numbers %>%

@@ -5,12 +5,13 @@ date: "July 19, 2024"
 output: tufte::tufte_html
 ---
 
+
 # Executive Summary
 
 # Purpose
 
 
-An estimated 450,000 to 470,000 individuals in TN are being denied their right to vote due to incarceration, disproportionately affecting African American voters. 
+An estimated 450,000 to 470,000 individuals in TN are being denied their right to vote due to incarceration, disproportionately affecting African American voters. Our purpose is to determine how many individuals are disenfranchised, specifically in each county in the state of Tennessee. 
 
 ## Methods
 
@@ -40,10 +41,25 @@ Figure 1.
 
 Figure 2.
 
-![Incarceration By Felony](plot plotototroto.jpeg)
+![Incarceration By Felony](plot plotototroto.jpeg){width=50%}
+
+
+Figure 3.
+
+![Measuring Correlation Coefficient Value](prop_aa_pop_vt.jpeg){width=400%}
+
+
+
+This plot shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. Although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
+
+![Logistic Regression](tfdr2 (1).jpg){width=70%}
+
+This chart comepares...
 
 
 # Conclusion
+Although the data on disenfranchisement is bare, the impact of our research is substantial. Through the research process, we found that voter disenfranchisement is not discussed enough nor tracked enough. The findings will aid in raising awareness of the issue and the importance of thorough data collection. Additionally, our study highlights the disproportionate impact of disfranchisement on minority communities due to lack of representation by elected officials.
+
 
 # Implications
-
+What we've found is....?
