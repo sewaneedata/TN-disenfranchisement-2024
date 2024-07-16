@@ -33,23 +33,25 @@ We built the Tennessee county map (see Figure 1) to illustrate the patterns in t
 
 Figure 1. 
 ![Voter Turnout](Rplot05.jpeg)
+this plot shows...
+
 
 Figure 2.
 
 ![Incarceration By Felony](plot plotototroto.jpeg){width=50%}
-
+this plot shows...
 
 Figure 3.
 
 ![Measuring Correlation Coefficient Value](prop_aa_pop_vt.jpeg){width=400%}
-
+this chart compares...
 
 
 This plot shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. Although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
 
 ![Logistic Regression](tfdr2 (1).jpg){width=70%}
 
-This chart comepares...
+This chart compares...
 
 
 # Conclusion
