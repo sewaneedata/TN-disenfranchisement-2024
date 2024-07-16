@@ -6,31 +6,23 @@
 3. Install R Studio (Learn how to do that [here](https://posit.co/download/rstudio-desktop/)).  
 4. Open R Studio.  
 
-5.Clone our GitHub repository!  
-      5.1. Go to the Project tab in the upper right corner RStudio.  
-      5.2. Click New Project -> Version Control -> Git  
-      5.3. Enter the URL of our repository (https://github.com/sewaneedata/TN-disenfranchisement-2024/tree/main) and specify the directory where you want to clone the repository.  
-      5.4. Click Create Project!  
+5. Clone our GitHub repository!  
+      1. Go to the Project tab in the upper right corner RStudio.  
+      2. Click New Project -> Version Control -> Git  
+      3. Enter the URL of our repository (https://github.com/sewaneedata/TN-disenfranchisement-2024/tree/main) and specify the directory where you want to clone the repository.  
+      4. Click Create Project!  
 
 6. Install the following dependencies using the install.packages() function. (You can also just run our "packages" script.)  
     - sf
-    - rnaturalearth
-    - remotes
-    - rnaturalearthhires
-    - rnaturalearthdata
     - tmap
-    - osmdata
     - tidycensus
-    - dplyr
-    - readr
-    - tidyr
-    - ggplot2
-    - sjPlot  
+    - tidyverse
+    - sjPlot
 7. Create a folder on your computer for data.  
 
 8. Access our datasets [here]() and download them to your data folder.   
-  8.1. For some datasets, our team did prep work in Excel. This allowed us to webscrape (automatically convert data from websites into manipulateable datasets) and quickly reformat data. We then renamed and cleaned the data in .csvs files. You can find these cleaned csvs files with the rest of our datasets in our data folder.    
-  8.2. You may need a census api key (request one [here](https://api.census.gov/data/key_signup.html)) to access the census data. Then, learn more about using your api key with the tidycensus package [here](https://walker-data.com/census-r/an-introduction-to-tidycensus.html).  
+      1. For some datasets, our team did prep work in Excel. This allowed us to webscrape (automatically convert data from websites into manipulateable datasets) and quickly reformat data. We then renamed and cleaned the data in .csvs files. You can find these cleaned csvs files with the rest of our datasets in our data folder.    
+      2. You may need a census api key (request one [here](https://api.census.gov/data/key_signup.html)) to access the census data. Then, learn more about using your api key with the tidycensus package [here](https://walker-data.com/census-r/an-introduction-to-tidycensus.html).  
 
 ### Project Organization 
   - We created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation.  
