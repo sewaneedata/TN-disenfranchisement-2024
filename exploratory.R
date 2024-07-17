@@ -4,6 +4,27 @@
 #rank by potential voter turnout impact?
 #clairify by no. convictions in a county
 
+# visualizations in this script:
+pov_unemp_heat
+race_heat
+income_heat
+income_cat_heat
+low_middle_high_heat
+highest_income_cat_heat
+voter_turnout_num_heat
+voter_turnout_perc_heat
+voter_turnout_int_heat
+incarceration_heat
+total_incarceration_heat
+county_inc_heat
+total_county_inc_heat
+inca_inco_point
+inca_poc_point
+inca_pov_point
+inc_by_felony
+disenf_by_county
+inca_afr_amr_point
+
 #load in libraries
 library(sf)
 library(rnaturalearth)
@@ -70,7 +91,7 @@ pivot_acs <- acs %>%
 
 # heat map for income level below poverty line and unemployed population
 tmap_mode("plot")
-tm_shape(pivot_acs) +
+poverty_unemployment <- tm_shape(pivot_acs) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -115,7 +136,7 @@ census_votes_sf <- st_as_sf(census_votes)
 
 # heat map for race
 tmap_mode("plot")
-tm_shape(census_votes_sf) +
+race_heat <- tm_shape(census_votes_sf) +
   tm_polygons(alpha = 0.8, col = c('white_', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -124,7 +145,7 @@ tm_shape(census_votes_sf) +
 
 # heat map for income
 tmap_mode("plot")
-tm_shape(census_votes_sf) +
+income_heat <- tm_shape(census_votes_sf) +
   tm_polygons(alpha = 0.8, col = c('lessthan10k', 'btwn10kand19999', 'btwn20kand34999', 'btwn35kand49999', 'btwn50kand74999', 'btwn75kand99999', 'over100k'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -150,21 +171,21 @@ View(census_votes_income)
 
 # heat map for number of people in each income category
 tmap_mode("view")
-tm_shape(census_votes_income) +
+income_cat_heat <- tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('low_income_percent', 'middle_income_percent', 'high_income_percent'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # heat map for number of people in each income category
 tmap_mode("view")
-tm_shape(census_votes_income) +
+low_middle_high_heat <- tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('low_income', 'middle_income', 'high_income'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # heat map for county income category majority
 tmap_mode("view")
-tm_shape(census_votes_income) +
+highest_income_cat_heat <- tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('highest_income_cat'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -173,13 +194,6 @@ tm_shape(census_votes_income) +
 
 # convert dataframe into a sf type object
 # census_votes_sf <- st_as_sf(census_votes)
-
-#heat map for race
-tmap_mode("plot")
-tm_shape(census_votes) +
-  tm_polygons(alpha = 0.8, col = c('white_', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
-  # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
 
 # total people of color household populations (no. of households), census
 census_votes_income_race <- census_votes_income %>%
@@ -226,21 +240,21 @@ View(census_votes_income_turnout)
 
 # heat map for voter turnout
 tmap_mode("view")
-tm_shape(census_votes_income_race_turnout) +
+voter_turnout_num_heat <- tm_shape(census_votes_income_race_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # heat map for voter turnout
 tmap_mode("view")
-tm_shape(census_votes_income_race_turnout) +
+voter_turnout_perc_heat <- tm_shape(census_votes_income_race_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # heat map for voter turnout
 tmap_mode("view")
-tm_shape(census_votes_income_race_turnout) +
+voter_turnout_int_heat <- tm_shape(census_votes_income_race_turnout) +
   tm_polygons(alpha = 0.8, col = c(`Voter Turnout Interval`), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -314,7 +328,7 @@ View(census_votes_corrections)
 # heat map for incarceration (tdoc, backup, local)
 #tmap_mode("plot")
 tmap_mode("view")
-tm_shape(census_votes_corrections) +
+incarceration_heat <- tm_shape(census_votes_corrections) +
   #tm_polygons(alpha = 0.8, col = c('TDOC #', 'Backup #', 'Local #' ), id = "NAME") +
   tm_polygons(alpha = 0.8, col = c('TDOC #', 'Backup #'), id = "NAME") +
   # make several layered maps that you can toggle between
@@ -326,20 +340,20 @@ census_votes_corrections_sf <- st_as_sf(census_votes_corrections)
 # heat map for incarceration (tdoc, backup, local)
 #tmap_mode("plot")
 tmap_mode("view")
-tm_shape(census_votes_corrections) +
+total_incarceration_heat <- tm_shape(census_votes_corrections) +
   tm_polygons(alpha = 0.8, col = c('Total #'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
 # number of people incarcerated in each county
 legend_breaks <- c(0, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000)
-tm_shape(census_votes_corrections) +
+county_inc_heat <- tm_shape(census_votes_corrections) +
   tm_polygons(col = 'Total #', alpha = 0.8, id = "NAME", breaks = legend_breaks) +
   tm_facets(as.layers = TRUE)
 
 # heat map for incarceration (statewide today)
 tmap_mode("view")
-tm_shape(census_votes_corrections) +
+total_county_inc_heat <- tm_shape(census_votes_corrections) +
   tm_polygons(alpha = 0.8, col = c('Systemwide #' ), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -355,14 +369,6 @@ inca_inco_lr <- lm(`Total #` ~ `highest_income_cat`, data = census_votes_correct
 summary(inca_inco_lr)
 inca_poc_lr <- lm(`Total #` ~ `poc_tally`, data = census_votes_corrections)
 summary(inca_poc_lr)
-
-ggplot(data = census_votes_corrections, aes( x = `Total #`, y = highest_income_cat)) +
-  geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +
-  geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poverty_income)) +
-  geom_point(color = "darkseagreen3")
-
 
 # CRIME TYPE
 
@@ -383,7 +389,7 @@ binary_incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
   summarize( total_inmates = sum(value, na.rm=TRUE) )
 
 # create a bar graph that visualizes number of offenses per offense type
-ggplot(binary_incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
+inc_by_felony <- ggplot(binary_incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
   geom_col(fill = 'orange') +
   labs(title = "Incarceration by Felony",
        x = "Violent or Non-Violent",
@@ -403,62 +409,56 @@ crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
            ))
 View(crime_type_inmate_numbers_clean)
 
-incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
-  select(offense_category, `TDOC Inhouse Inmates`, `TDOC Backup Inmates`, `Locally Sentenced Inmates`, `Statewide Inmates`) %>%
-  pivot_longer(cols = -offense_category, names_to = "inmate_type", values_to = "inmates") %>%
-  group_by(offense_category) %>%
-  summarize(total_inmates = sum(inmates))
-View(incarceration_by_felony)
+# make offense type categorical (non-violent = 0, violent = 1) for visualization
+binary_incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
+  select(offense_category, `TDOC Inhouse Inmates`, `TDOC Backup Inmates`, `Locally Sentenced Inmates`,`Statewide Inmates`) %>%
+  pivot_longer(!offense_category) %>%
+  group_by( offense_category ) %>%
+  summarize( total_inmates = sum(value, na.rm=TRUE) )
 
-total_inmates_all_categories <- sum(incarceration_by_felony$total_inmates)
+total_inmates_all_categories <- sum(binary_incarceration_by_felony$total_inmates)
 
-incarceration_by_felony <- incarceration_by_felony %>%
+binary_incarceration_by_felony <- binary_incarceration_by_felony %>%
   mutate(proportion = total_inmates / total_inmates_all_categories)
 
+violent_proportion <- binary_incarceration_by_felony %>%
+  filter( offense_category == "violent" ) %>%
+  pull( proportion )
+
+nonviolent_proportion <- 1 - violent_proportion
+
 county_inmates_estimate <- county_incarceration_numbers_clean %>%
-  rowwise() %>%
-  mutate(violent_inmates = `Total #` * incarceration_by_felony$proportion[incarceration_by_felony$offense_category == "violent"],
-         non_violent_inmates = `Total #` * incarceration_by_felony$proportion[incarceration_by_felony$offense_category == "non-violent"])
+  mutate(violent_inmates = `Total #` * violent_proportion,
+         non_violent_inmates = `Total #` * nonviolent_proportion)
 View(county_inmates_estimate)
 
+# join df columns by "County" to create census_votes
+county_census_votes_corrections <- left_join(census_votes_corrections, county_inmates_estimate, by = "County")
+View(county_census_votes_corrections)
 
+# convert dataframe into a sf type object
+county_census_votes_corrections_sf <- st_as_sf(county_census_votes_corrections)
 
+# no. of people disenfranchised by county
+legend_breaks2 <- c(0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000)
+tmap_mode("view")
+disenf_by_county <- tm_shape(county_census_votes_corrections_sf) +
+  tm_polygons(alpha = 0.8, col = c('violent_inmates','non_violent_inmates'), id = "NAME", breaks = legend_breaks2) +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
 
-county_inmates_estimate <- county_inmates %>%
-  rowwise() %>%
-  mutate(violent_inmates = total_inmates * (incarceration_by_felony$proportion[incarceration_by_felony$offense_category == "violent"]),
-         non_violent_inmates = total_inmates * (incarceration_by_felony$proportion[incarceration_by_felony$offense_category == "non-violent"]))
-
-county_proportions <- incarceration_by_felony %>%
-  group_by(County) %>%
-  mutate(total_county_inmates = sum(total_inmates),
-         proportion = total_inmates / total_county_inmates) %>%
-  select(County, offense_category, proportion)
-
-
-# create a new df with the proportion of violent and nonviolent crimes
-violence_proportion <- census_votes_corrections %>%
-  # Calculate the total number of crimes (violent + nonviolent) for each county
-  mutate(total_crimes = 'violent' + 'non-violent') %>%
-  # Calculate the proportion of violent and nonviolent crimes
-  mutate(violent_proportion = violent / total_crimes,
-         nonviolent_proportion = non-violent / total_crimes) %>%
-  # Select the relevant columns
-  select(County, violent_proportion, nonviolent_proportion)
-
-# View the resulting dataframe
-View(violence_proportion)
-
-
-ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +
+# relationship with no. people incarcerated and proprotion of people of color in TN counties
+inca_poc_point <-  ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +
   geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_corrections, aes( x = `Total #`, y = afr_amr_tally)) +
+
+# relationship with no. people incarcerated and proprotion of people in poverty in TN counties
+inca_pov_point <- ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poverty_income)) +
   geom_point(color = "darkseagreen3")
-#ggplot(data = census_votes_corrections, aes( x = `Total #`, y = afr_amr_percent)) +
-  #geom_point(color = "darkseagreen3")
 
-
-
+# relationship with no. people incarcerated and proprotion of african americans in TN counties
+inca_afr_amr_point <- ggplot(data = census_votes_corrections, aes( x = `Total #`, y = afr_amr_percent)) +
+  geom_point(color = "darkseagreen3")
+  # less to do with afr. amr. population as a whole?
 
 
 
