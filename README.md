@@ -21,11 +21,6 @@
     - remotes
     - sjPlot
     - rnaturalearthhires
-6. Create a folder on your computer for data.  
-
-7. Access our datasets [here]() and download them to your data folder.   
-      1. For some datasets, our team did prep work in Excel. This allowed us to webscrape (automatically convert data from websites into manipulateable datasets) and quickly reformat data. We then renamed and cleaned the data in .csvs files. You can find these cleaned csvs files with the rest of our datasets in our data folder.    
-      2. You may need a census api key (request one [here](https://api.census.gov/data/key_signup.html)) to access the census data. Then, learn more about using your api key with the tidycensus package [here](https://walker-data.com/census-r/an-introduction-to-tidycensus.html).  
 
 ### Project Organization 
   - We created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation.  
@@ -48,3 +43,9 @@
 - [Khalilah Karriem,](https://github.com/kkarriemk1234) Jackson State University C'26
 - [Santana Etchison,](https://github.com/santanaetch) The University of the South C'27
 - [Adri Silva,](https://github.com/adri-elle-silva) The University of the South C'24
+
+### Notes
+1. All the required data is in the data folder.
+2. For some datasets, our team did prep work in Excel. This allowed us to webscrape (automatically convert data from websites into manipulateable datasets) and quickly reformat data. We then renamed and cleaned the data in .csvs files. You can find these cleaned csvs files with the rest of our datasets in our data folder.    
+3. You may need a census api key (request one [here](https://api.census.gov/data/key_signup.html)) to access the census data. Then, learn more about using your api key with the tidycensus package [here](https://walker-data.com/census-r/an-introduction-to-tidycensus.html).  
+
