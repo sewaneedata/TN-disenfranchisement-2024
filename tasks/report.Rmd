@@ -52,185 +52,37 @@ Figure 2.
 To obtain Figure 2, we used data from the 2022 Tennessee Department of Corrections on the currently incarcerated population by felony type. One of the most immediately apparent observations from Figure 2 is that 101,666 people convicted of a felony are not due to violent crimes. Therefore, 101,666 could have their rights restored upon release were it not for the convoluted rights restoration process, which includes paying off one's legal financial obligations (LFOs) and restoring one's gun rights (according to the recent Falls v. Goins case).  
 
 Figure 3. 
-![]()  
+![]()
 
 Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 
 
 Figure 4. 
-![]()
+![Non-Violent V. Violent](pic 3.jpeg)
 Using the data from the 2022 Tennessee Department of Corrections and building off of Uggen, Larson, Shannon, and Stewart's (2022) approximation of individuals across Tennessee who are currently post-release, we also estimated the statewide number of individuals who have already been released from incarceration but are still disenfranchised. Figure 4 shows the estimated amount of disenfranchised people across the state either due to violent crimes () or non-violent crimes (). 
-
 
 Figures 5 & 6. 
 ![Measuring Correlation Coefficient Value](prop_aa_pop_vt.jpeg){width=400%}
 ![Logistic Regression](tfdr2 (1).jpg){width=70%}  
 
-Figure 5 shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. This is notable because, although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
+Figures 5 & 6 show through logistic regression that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. This is notable because, although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
 
 Figure 7.   
 ![Highest Income by Category by County](Web capture_16-7-2024_144557_.jpeg){width=90%}   
 This map shows all Tennessee Counties and color codes them by income category (teal being low income, yellow being middle, no high income counties). The category is determined by taking the income group that takes up the highest proportion of the county. 
 
-
+Figure 8.   
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 source("../../TN-disenfranchisement-2024/exploratory.R")
 ```
+In Figure 8, each dot is equivalent to a county. POC stands for 'person of color' and is determined via ACS Census Bureau tracts-- African American, Native American, Asian, Pacific Islander, and Other. This shows a slightly positively correlated relationship between the number people incarcerated and proportion of people of color in TN counties. In other words, as the number of people of color in a county increases, so does the rate of incarceration. This correlation is not inherently causal, but is worth exploring further. 
 
-
+Figure 9. 
 ```{r echo = FALSE, message = FALSE, warning = FALSE }
 # comes from exploratory.R
 # relationship with no. people incarcerated and proprotion of people of color in TN counties
 inca_poc_point
 ```
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-pov_unemp_heat
-```
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-race_heat
-```
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-income_heat
-```
-
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-income_cat_heat
-```
-
-
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-low_middle_high_heat
-```
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-highest_income_cat_heat
-```
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-voter_turnout_num_heat
-```
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-voter_turnout_int_heat
-```
-
-
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-incarceration_heat
-
-
-```
-
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-total_incarceration_heat
-```
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-county_inc_heat
-```
-
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-total_county_inc_heat
-```
-
-
-
-
-
-
-
-
+In Figure 9, each dot is equivalent to a county. POC stands for 'person of color' and is determined via ACS Census Bureau tracts-- African American, Native American, Asian, Pacific Islander, and Other. This shows a slightly positively correlated relationship between the number people incarcerated and proportion of people of color in TN counties. In other words, as the number of people of color in a county increases, so does the rate of incarceration. This correlation is not inherently causal, but is worth exploring further.
 
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
@@ -238,34 +90,30 @@ inca_pov_point
 ```
 
 
+Figure 10. 
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+income_cat_heat
+```
+What percent of population is of each income type in each county. 
 
 
+Figure 11. 
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+voter_turnout_perc_heat
+```
+More detailed percent voter turnout by county.
 
 
-
-
-
-
+Figure 13. 
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+county_inc_heat
+```
+Number of people incarcerated in each county
 
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 disenf_by_county
 ```
-
-
-
-
-
-
-
-
-
-
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-inca_afr_amr_point
-```
-
-
 
 
 
