@@ -84,20 +84,20 @@ inca_poc_point
 ```
 In Figure 9, each dot is equivalent to a county. POC stands for 'person of color' and is determined via ACS Census Bureau tracts-- African American, Native American, Asian, Pacific Islander, and Other. This shows a slightly positively correlated relationship between the number people incarcerated and proportion of people of color in TN counties. In other words, as the number of people of color in a county increases, so does the rate of incarceration. This correlation is not inherently causal, but is worth exploring further.
 
-
+Figure 10. 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 inca_pov_point
 ```
 
 
-Figure 10. 
+Figure 11. 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 income_cat_heat
 ```
 What percent of population is of each income type in each county. 
 
 
-Figure 11. 
+Figure 12. 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 voter_turnout_perc_heat
 ```
@@ -111,10 +111,10 @@ county_inc_heat
 Number of people incarcerated in each county
 
 
+Figure 14.
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
 disenf_by_county
 ```
-
 
 
 # Conclusion
