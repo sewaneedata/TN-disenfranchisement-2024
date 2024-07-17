@@ -19,6 +19,7 @@ library(tidyr)
 library(tidyverse)
 library(readxl)
 library(ggplot2)
+library(ggthemes)
 
 # upload census csv
 # from us census bureau
@@ -110,7 +111,7 @@ View(census_votes)
   #represents the number of people, not the number of people in each income group
 
 # convert dataframe into a sf type object
-census_votes_sf <- st_sf(census_votes)
+census_votes_sf <- st_as_sf(census_votes)
 
 # heat map for race
 tmap_mode("plot")
@@ -171,7 +172,7 @@ tm_shape(census_votes_income) +
 # CENSUS (RACE)
 
 # convert dataframe into a sf type object
-census_votes_sf <- st_sf(census_votes)
+# census_votes_sf <- st_as_sf(census_votes)
 
 #heat map for race
 tmap_mode("plot")
@@ -308,7 +309,7 @@ census_votes_corrections <- left_join(census_votes_income_race_turnout, county_i
 View(census_votes_corrections)
 
 # convert dataframe into a sf type object
-#census_votes_corrections_sf <- st_sf(county_incarceration_numbers_clean)
+#census_votes_corrections_sf <- st_as_sf(county_incarceration_numbers_clean)
 
 # heat map for incarceration (tdoc, backup, local)
 #tmap_mode("plot")
@@ -320,7 +321,7 @@ tm_shape(census_votes_corrections) +
   tm_facets(as.layers = TRUE)
 
 # convert dataframe into a sf type object
-census_votes_corrections_sf <- st_sf(census_votes_corrections)
+census_votes_corrections_sf <- st_as_sf(census_votes_corrections)
 
 # heat map for incarceration (tdoc, backup, local)
 #tmap_mode("plot")
@@ -379,7 +380,7 @@ binary_incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
   select(offense_category, `TDOC Inhouse Inmates`, `TDOC Backup Inmates`, `Locally Sentenced Inmates`,`Statewide Inmates`) %>%
   pivot_longer(!offense_category) %>%
   group_by( offense_category ) %>%
-  summarize( total_inmates = sum(value) )
+  summarize( total_inmates = sum(value, na.rm=TRUE) )
 
 # create a bar graph that visualizes number of offenses per offense type
 ggplot(binary_incarceration_by_felony, aes(x = offense_category, y=total_inmates)) +
