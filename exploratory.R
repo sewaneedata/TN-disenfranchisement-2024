@@ -5,25 +5,25 @@
 #clairify by no. convictions in a county
 
 # visualizations in this script:
-pov_unemp_heat
-race_heat
-income_heat
-income_cat_heat
-low_middle_high_heat
-highest_income_cat_heat
-voter_turnout_num_heat
-voter_turnout_perc_heat
-voter_turnout_int_heat
-incarceration_heat
-total_incarceration_heat
-county_inc_heat
-total_county_inc_heat
-inca_inco_point
-inca_poc_point
-inca_pov_point
-inc_by_felony
-disenf_by_county
-inca_afr_amr_point
+# pov_unemp_heat
+# race_heat
+# income_heat
+# income_cat_heat
+# low_middle_high_heat
+# highest_income_cat_heat
+# voter_turnout_num_heat
+# voter_turnout_perc_heat
+# voter_turnout_int_heat
+# incarceration_heat
+# total_incarceration_heat
+# county_inc_heat
+# total_county_inc_heat
+# inca_inco_point
+# inca_poc_point
+# inca_pov_point
+# inc_by_felony
+# disenf_by_county
+# inca_afr_amr_point
 
 #load in libraries
 library(sf)
@@ -91,7 +91,7 @@ pivot_acs <- acs %>%
 
 # heat map for income level below poverty line and unemployed population
 tmap_mode("plot")
-poverty_unemployment <- tm_shape(pivot_acs) +
+pov_unemp_heat <- tm_shape(pivot_acs) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -446,6 +446,7 @@ disenf_by_county <- tm_shape(county_census_votes_corrections_sf) +
   tm_polygons(alpha = 0.8, col = c('violent_inmates','non_violent_inmates'), id = "NAME", breaks = legend_breaks2) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
+print(disenf_by_county)
 
 # relationship with no. people incarcerated and proprotion of people of color in TN counties
 inca_poc_point <-  ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +
