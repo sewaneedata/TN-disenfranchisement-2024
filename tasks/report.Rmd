@@ -6,95 +6,117 @@ output: tufte::tufte_html
 ---
 
 # Executive Summary
-The purpose of this report is to give the client in-depth insight into the various processes we went through throughout creating this project. This report will cover our purpose for this research project, the methods we used, what we did with the data, the data analysis, key findings, figures, and what we've concluded from all the data we've compiled. With our findings, we will be able to help many with the task of combating disenfranchisement. 
+The purpose of this report is to give the client in-depth insight into the various processes we went through while creating this project. This report will cover our purpose for this research project, the methods we used, what we did with the data, the data analysis, key findings, figures, and what we've concluded from all the data we've compiled. With our findings, we will be able to help many with the task of combating disenfranchisement. 
 
 # Introduction
 
-An estimated 450,000 to 470,000 individuals in TN are being denied their right to vote due to incarceration, disproportionately affecting African American voters. Our purpose is to determine how many individuals are disenfranchised, specifically in each county in the state of Tennessee. 
+An estimated 450,000 to 470,000 individuals in TN are being denied their right to vote due to incarceration (Uggen, Larson, Shannon, and Stewart, 2022), disproportionately affecting African American voters (King and Erickson, 2016; Daniels, 2020; Betts-Gaston, 2022; Manza and Uggen, 2004; Blain, 2003). Research on felony disenfranchisement frequently explores who is affected, the reasons why people are affected, and the implications of disenfranchisement laws regarding discussions on legislature, policy, race and marginalization, historical context, incarceration, and violations of rights. However, there are many gaps in related literature that fail to quantify how felony disenfranchisement impacts elections, especially by location. This project seeks to fill in some of these gaps by investigating how many individuals are disenfranchised, specifically in each county in the state of Tennessee. 
 
 # Methods
-
-In order to make our findings most useful for policymakers and legislators, we used `RMarkdown` to create a written report with our findings for Dr. Sekou Franklin. Our analysis consisted of making choropleths to visualize trends as well as creating charts and tables, which is the most suitable format for  legislators and policy makers.  
-
 ### Data Acquisition
-There is no standardized tracking system in place that houses county-level data on the number of disenfranchised individuals who are eligible to restore their voting rights. To circumvent this roadblock, we obtained an estimate of the number of people impacted by county and how it affects local elections by scouring the internet. We performed web scraping, data cleaning, and data exploration to obtain the appropriate datasets. 
+There is no standardized tracking system in place that houses county-level data on the number of disenfranchised individuals who are eligible to restore their voting rights. To circumvent this roadblock, we obtained an estimate of the number of people impacted by county and how it affects local elections by scouring the internet. We performed web scraping, data cleaning, and data exploration to obtain the appropriate datasets.
 
 ### Data Provenance
-Our data comes from the following sources:
+The data we compiled comes from the following sources:
 
-**2019 Crime Data from the Federal Bureau of Investigation (FBI):** 
+**2019 Crime Data from the Federal Bureau of Investigation (FBI):**  
 This dataset provides information on crime rates and types of crimes reported across different regions, which is essential for understanding the context of criminal justice and its implications on disenfranchisement.
 
-**2022 Election Data from the Secretary of State:** 
+**2022 Election Data from the Secretary of State:**   
 This dataset includes election-related data such as voter turnout, election results, and voter registration statistics. It helps in analyzing the electoral process and its outcomes, especially in relation to disenfranchisement.
 
-**Original Data on County Parties from the County Mayor’s Office:**
-This dataset includes political party affiliations, voter demographics, and  information related to political organizations or groups within counties. It aids in understanding the political landscape and partisan dynamics affecting disenfranchisement.
+**Original Data on County Parties from the County Mayor’s Office:**  
+This dataset is an original dataset that we created to include political party affiliations of county leadership in each county in Tennessee. It aids in understanding the political landscape and partisan dynamics affecting disenfranchisement.
 
-**2022 State and Countywide Incarceration Data from the TN Department of Corrections:**
-This dataset contains information on the number of incarcerated individuals at state and county levels in Tennessee. It is crucial for analyzing the impact of incarceration rates on disenfranchisement.
+**2022 State and Countywide Incarceration Data from the TN Department of Corrections:**  
+This dataset contains information on the number of individuals incarcerated for a felony conviction at state and county levels in Tennessee. It is crucial for analyzing the impact of incarceration rates on disenfranchisement.
 
-**2022 Demographic Data from the Census:**
+**2022 Demographic Data from the Census:**  
 This dataset provides demographic information such as population demographics, socioeconomic status, and racial demographics. It helps in understanding the demographic composition of areas affected by disenfranchisement.
 
 ### Dataset Merging
-
-We merged relevant datasets to create original ones, enabling us to approach our question from a fresh perspective beyond providing a single numerical answer. We merged the voter turnout data with the census data to analyze what demographics might influence voter turnout by county. 
-
-The datasets used in the No Vote No Voice: TN Disenfranchisement Project, analyzes the relationships between incarceration rates, demographic factors, election outcomes, and disenfranchisement across counties in Tennessee. To achieve this, the project merges Census data, FBI crime statistics, and corrections datasets. This integration allows for a comprehensive analysis that considers demographic profiles, crime rates, and the impact of incarceration on voting rights across different counties in Tennessee.
+We merged the aforementioned datasets to create original ones, enabling us to approach our question from a fresh perspective beyond providing a single numerical answer. Specifically, we merged the voter turnout data with the census data to analyze what demographics might influence voter turnout by county. We also analyzed the relationships between incarceration rates, demographic factors, election outcomes, and disenfranchisement across counties in Tennessee. This integration allows for a comprehensive analysis that considers demographic profiles, crime rates, and the impact of incarceration on voting rights across different counties in Tennessee.
 
 # Analysis
-
-## Key Findings
-We built the Tennessee county map (see Figure 1) to illustrate the patterns in the voter turnout and compare with the demographics of each county. Then, we charted the incarceration rate by felony type (see Figure 2) to get an estimate of the ratio of individuals who have the possibility of restoring their rights upon release versus those who do not. One of the most immediately apparent observations is that most people convicted of a felony are not due to violent crimes and thus could have their rights restored were it not for legal financial obligations (LFOs). 
-
+We built the Tennessee county map (see Figure 1) to illustrate the patterns in the voter turnout and compare with the demographics of each county. Then, we charted the incarceration rate by felony type (see Figure 2) to get an estimate of the ratio of individuals who have the possibility of restoring their rights upon release versus those who do not. 
 
 Figure 1. 
 ![Voter Turnout](Rplot05.jpeg)
 
 
-This plot shows voter turnout rates. As you can see, the percentage only goes up to 50%. This is because Tennessee has one of the lowest voter turnout rates in the U.S.
+This plot shows voter turnout rates. As you can see, the percentage only goes up to 50%. This is because Tennessee has one of the lowest voter turnout rates in the U.S. ().
 
 Figure 2.
 
 ![Incarceration By Felony](plot plotototroto.jpeg){width=50%}
 
+To obtain Figure 2, we used data from the 2022 Tennessee Department of Corrections on the currently incarcerated population by felony type. One of the most immediately apparent observations from Figure 2 is that 101,666 people convicted of a felony are not due to violent crimes. Therefore, 101,666 could have their rights restored upon release were it not for the convoluted rights restoration process, which includes paying off one's legal financial obligations (LFOs) and restoring one's gun rights (according to the recent Falls v. Goins case).  
 
-This plot shows...
+Figure 3. 
+![]() 
+Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 
+
+Figure 4.
+![]()
+Using the data from the 2022 Tennessee Department of Corrections and building off of Uggen, Larson, Shannon, and Stewart's (2022) approximation of individuals across Tennessee who are currently post-release, we also estimated the statewide number of individuals who have already been released from incarceration but are still disenfranchised. Figure 4 shows the estimated amount of disenfranchised people across the state either due to violent crimes () or non-violent crimes (). 
 
 
-
-
-Figure 3.
-
+Figure 5.
 ![Measuring Correlation Coefficient Value](prop_aa_pop_vt.jpeg){width=400%}
 
+Figure 5 shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. Although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
 
-This plot shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. Although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
+Figure 6.  
+![Logistic Regression](tfdr2 (1).jpg){width=70%}  
 
-![Logistic Regression](tfdr2 (1).jpg){width=70%}
 
 This chart compares...
 
-
-
+Figure 7. 
 ![Highest Income by Category by County](Web capture_16-7-2024_144557_.jpeg){width=90%} 
-
-
-
-
-
-
 
 This map shows all Tennessee Counties and color codes them by low income counties and middle income counties (Teal being low income, yellow being middle).
 
-
-# Key Takeaways
-
+# Key Observations
 We found that there are 110,000 individuals currently incarcerated, while an estimated 300,000 individuals have been released from prison and may be eligible to regain their right to vote. There is a direct relationship between counties with high incarceration rates and low voter turnout. Counties with high incarceration rates have never exceeded 50 percent in voter turnout, contributing to Tennessee having the lowest voter turnout in the country.
-
-
-
 
 # Conclusion
 Although the data on disenfranchisement is bare, the impact of our research is substantial. Through the research process, we found that voter disenfranchisement is not discussed enough nor tracked enough. The findings will aid in raising awareness of the issue and the importance of thorough data collection. Additionally, our study highlights the disproportionate impact of disfranchisement on minority communities due to lack of representation by elected officials.
+
+CAVEATS
+1. We don't know if incarceration is based on where they are convicted, their street address, or where they're imprisoned
+2. We took a state-wide proportion and generalized it to all counties, which is not entirely true to reality. 
+
+# Bibliography
+Betts-Gaston, Avalon, Christopher Uggen, Ryan Larson, Sarah Shannon, and Robert Stewart. 2022. “Disenfranchisement In 2022.” In _Locked Out 2022: Estimates Of People Denied Voting Rights Due To A Felony Conviction,_ 6–10. The Sentencing Project.  
+
+Blain, Ludovic. 2003. “One Person, No Vote: Felony Disenfranchisement Strips People Of Color Of Political Power.” In _Race, Poverty & the Environment, 10_(2): 49–51. http://www.jstor.org/stable/41554399 (June 20, 2024).  
+
+Blessett, Brandi. 2015. “Disenfranchisement: Historical Underpinnings And Contemporary Manifestations.” In _Public Administration Quarterly, 39_(1): 3–50. https://www.jstor.org/stable/24372042 (June 19, 2024).  
+
+Budd, Kristen, Emma Stammen, and Whitney Threadcraft. 2022. “Tennessee Denies Voting Rights to 450,000 Citizens.” 1–4, The Sentencing Project. https://www.sentencingproject.org/app/uploads/2023/01/Tennessee-Voting-Rights-for-People-with-Felony-Convictions.pdf (June 19, 2024).  
+
+Burm, Pierce. 2023. “How Much Longer Will African Americans Be Disenfranchised?” SUNY Cortland. https://digitalcommons.cortland.edu/rhetdragonsresearchinquiry/14/ (June 19, 2024).  
+
+Cottrell, David, Michael C. Herron , Javier M. Rodriguez, and Daniel A. Smith. 2019. “Mortality, Incarceration, and African American Disenfranchisement in the Contemporary United States.” In _Journal of African American Studies, 23_(4): 567-582. https://journals.sagepub.com/doi/10.1177/1532673X18754555 (June 19, 2024).  
+
+Daniels, Gilda R. 2020. “Felon Disenfranchisement.” In _Uncounted: The Crisis of Voter Suppression in America,_ 146–171. NYU Press. http://www.jstor.org/stable/j.ctv1jk0hnr.9 (June 20, 2024). 
+
+Goldman, Daniel S. 2004. “The Modern-Day Literacy Test?: Felon Disenfranchisement and Race Discrimination.” In _Stanford Law Review, 57_(2): 611–655. http://www.jstor.org/stable/40040212 (June 20, 2024). 
+
+King, Bridgett A. and Laura Erickson. 2016. “Disenfranchising the Enfranchised: Exploring the Relationship Between Felony Disenfranchisement and African American Voter Turnout.” In _Journal of Black Studies, 47_(8): 799–821. http://www.jstor.org/stable/26174229 (June 19, 2024).
+
+Manza, Jeff, & Christopher Uggen. 2004. “Punishment and Democracy: Disenfranchisement of Nonincarcerated Felons in the United States.” In _Perspectives on Politics, 2_(3): 491–505. http://www.jstor.org/stable/3688812 (June 19, 2024). 
+
+Middlemass, Keesha M. 2006. “Rehabilitated But Not Fit to Vote: A Comparative Racial Analysis of Disenfranchisement Laws.” In _Souls, 8_(2): 22–39. doi: 10.1080/10999940600680424 (June 19, 2024). 
+
+Miles, Thomas J. 2004. “Felon Disenfranchisement and Voter Turnout”. In _University of Chicago Press Journals, 33_(1): 85-129. https://www.journals.uchicago.edu/doi/epdf/10.1086/381290 (June 19, 2024).
+
+Okechukwu, Teddy. 2022. “Disenfranchisement, Democracy, And Incarceration: A Legislative End To Felony Disenfranchisement in United States Prisons.” In _University Of Pennsylvania Law Review,_ _170_(5): 1303+. https://link.gale.com/apps/doc/A725120994/AONE?u=tel_a_uots&sid=bookmark-AONE&xid=10878735 (June 19, 2024).
+
+Selin, Jennifer L. 2019. “The Best Laid Plans: How Administrative Burden Complicates Voting Rights Restoration Law And Policy.” In _Missouri Law Review, 84_(4): 999-1036. https://heinonline.org/HOL/P?h=hein.journals/molr84&i=102  (June 20, 2024).
+
+Uggen, Christopher, Ryan Larson, Sarah Shannon, and Robert Stewart. 2022. “Summary.” In _Locked Out 2022: Estimates Of People Denied Voting Rights Due To A Felony Conviction,_ 15–18. The Sentencing Project. 
+
+Uggen, Christopher, Ryan Larson, Sarah Shannon, and Robert Stewart. 2023. “The Denial of Voting Rights To People With Criminal Records.” In _Beyond Bars: A Path Forward from 50 Years of Mass Incarceration in the United States,_ 1st edition, eds. Kristen M. Budd, David C. Lane, Glenn W. Muschert, and Jason A. Smith, 73–85. Bristol University Press. https://www.jstor.org/stable/jj.5590542.14 (June 19, 2024).
+
