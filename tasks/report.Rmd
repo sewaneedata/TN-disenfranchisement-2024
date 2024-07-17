@@ -47,13 +47,13 @@ Figure 1.
 This plot shows voter turnout rates. As you can see, the percentage only goes up to 50%. This is because Tennessee has one of the lowest voter turnout rates in the U.S. ().
 
 Figure 2.
-
 ![Incarceration By Felony](plot plotototroto.jpeg){width=50%}
 
 To obtain Figure 2, we used data from the 2022 Tennessee Department of Corrections on the currently incarcerated population by felony type. One of the most immediately apparent observations from Figure 2 is that 101,666 people convicted of a felony are not due to violent crimes. Therefore, 101,666 could have their rights restored upon release were it not for the convoluted rights restoration process, which includes paying off one's legal financial obligations (LFOs) and restoring one's gun rights (according to the recent Falls v. Goins case).  
 
 Figure 3. 
-![]() 
+![]()  
+
 Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 
 
 Figure 4.
@@ -70,10 +70,8 @@ Figure 6.
 ![Logistic Regression](tfdr2 (1).jpg){width=70%}  
 
 
-This chart compares...
-
-Figure 7. 
-![Highest Income by Category by County](Web capture_16-7-2024_144557_.jpeg){width=90%} 
+Figure 7.   
+![Highest Income by Category by County](Web capture_16-7-2024_144557_.jpeg){width=90%}   
 This map shows all Tennessee Counties and color codes them by low income counties and middle income counties (Teal being low income, yellow being middle).
 
 
@@ -83,11 +81,9 @@ source("../../TN-disenfranchisement-2024/exploratory.R")
 
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE }
+# comes from exploratory.R
+# relationship with no. people incarcerated and proprotion of people of color in TN counties
 inca_poc_point
-
-
-
-
 ```
 
 
