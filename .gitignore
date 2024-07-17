@@ -9,8 +9,6 @@
 **/*.html
 #This is for macs only 
 **/*.DS_Store
-#this ignores csv files
-**/*.csv
 # this ignores excel sheets
 **/*.xlsx
 **/*.xls
@@ -22,5 +20,3 @@
 **/*.jS
 # this ignores Cascading Style Sheets
 **/*.css
-# Ignoring the data folder
-data

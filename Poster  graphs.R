@@ -262,12 +262,11 @@ tm_shape(corrections_data_2) +
 
 
 library(readr)
-corrections1 <- read_csv("data/corrections1.csv")
+corrections1 <- read_csv("corrections1.csv")
 View(corrections1)
 
-
 library(readr)
-corrections2 <- read_csv("data/corrections2.csv")
+corrections2 <- read_csv("corrections2.csv")
 View(corrections2)
 # clean the data to remove NA rows
 corrections_data_1_clean <- corrections1 %>% 
@@ -484,120 +483,6 @@ print(p)
 
 
 
-
-
-
-
-
-
-
-library(dplyr)
-library(readr)
-
-#  CSV file is correctly located in the "data" directory relative to your working directory
-Tennesse_Incarcerations_Sheet1_ <- read_csv("data/Tennesse Incarcerations (Sheet1).csv")
-
-# Remove NA values from specific columns and view the cleaned data frame
-Tennesse_Incarcerations_Sheet1_clean <- Tennesse_Incarcerations_Sheet1_ %>%
-  filter(!is.na(`Correctional Facilities`) & !is.na(Location) & !is.na(County))
-
-# View the cleaned data frame
-View(Tennesse_Incarcerations_Sheet1_clean)
-
-
-
-library(ggplot2)
-
-# Example: Count occurrences of each Correctional Facility by County
-facility_count <- Tennesse_Incarcerations_Sheet1_clean %>%
-  group_by(`Correctional Facilities`, County) %>%
-  summarise(count = n())
-
-# Plotting
-ggplot(facility_count, aes(x = `Correctional Facilities`, y = count, fill = County)) +
-  geom_bar(stat = "identity") +
-  labs(title = "Number of Inmates by Correctional Facility and County",
-       x = "Correctional Facility",
-       y = "Count") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  scale_fill_viridis_d()  # Adjust color palette as needed
-
-
-
-#ddddd
-
-
-
-
-
-#Finding the county by incarceration
-
-
-
-install.packages("ggplot2")
-install.packages("sf")
-install.packages("dplyr")
-install.packages("ggthemes")
-library(ggplot2)
-library(sf)
-library(dplyr)
-library(ggthemes)
-
-
-
-# Example data for illustration (replace with your actual data)
-# Load county boundaries for Tennessee (shapefile or geojson format)
-tn_counties_sf <- st_read("data/census.csv")
-
-# Example incarceration data by county (replace with your actual data)
-corrections1_data_1_clean <- data.frame(
-  County = c("Davidson", "Shelby", "Knox", "Hamilton", "Rutherford"),
-  Incarceration_Rate = c(1200, 900, 800, 700, 600)
-)
-
-# Merge data
-tn_counties_sf <- left_join(tn_counties_sf, corrections_data_1_clean, by = c("County" = "County"))
-
-
-
-
-# Plot map
-ggplot() +
-  geom_bar(data = corrections1_data_1_clean, aes(fill = Incarceration_Rate), color = "white", size = 0.2) +
-  scale_fill_viridis_c(option = "plasma", direction = -1) +
-  labs(title = "Incarceration Rates by County in Tennessee",
-       fill = "Incarceration Rate per 100,000",
-       caption = "Source: Your Source") +
-  theme_minimal()
-
-
-
-# Example: Adding county labels
-ggplot() +
-  geom_sf(data = tn_map_data, aes(fill = Incarceration_Rate), color = "white", size = 0.2) +
-  scale_fill_viridis_c(option = "plasma", direction = -1) +
-  labs(title = "Incarceration Rates by County in Tennessee",
-       fill = "Incarceration Rate per 100,000",
-       caption = "Source: Your Source") +
-  theme_minimal() +
-  geom_text(data = tn_map_data, aes(label = County), size = 2, color = "black", check_overlap = TRUE)
-
-
-
-
-
-
-# Example: Overlaying with prison locations (if available)
-# Assuming prison_locations_sf is a spatial dataset with prison locations
-ggplot() +
-  geom_sf(data = tn_map_data, aes(fill = Incarceration_Rate), color = "white", size = 0.2) +
-  geom_sf(data = prison_locations_sf, color = "red", size = 2, alpha = 0.8) +
-  scale_fill_viridis_c(option = "plasma", direction = -1) +
-  labs(title = "Incarceration Rates and Prison Locations in Tennessee",
-       fill = "Incarceration Rate per 100,000",
-       caption = "Source: Your Source") +
-  theme_minimal()
 
 
 

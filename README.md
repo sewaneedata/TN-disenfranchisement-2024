@@ -16,7 +16,11 @@
     - tmap
     - tidycensus
     - tidyverse
+    - ggthemes
+    - tufte
+    - remotes
     - sjPlot
+    - rnaturalearthhires
 6. Create a folder on your computer for data.  
 
 7. Access our datasets [here]() and download them to your data folder.   
