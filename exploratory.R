@@ -288,15 +288,6 @@ View(crime_type_inmates)
 county_incarceration_numbers <- read_csv("data/corrections2.csv")
 View(county_incarceration_numbers)
 
-# create 'Offense Type' category column (violent/non-violent)
-crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
-  mutate(offense_category = 
-            ifelse(`Offense Type` %in% 
-            c( 'Murder', 'Forcible Sex Offense', 'Non-Forcible Sex
-               Offense', 'Forgery/Fraud'),  'violent', 'non-violent'  
-            ))
-View(crime_type_inmate_numbers_clean)
-
 # make offense type categorical (non-violent = 0, violent = 1) for visualization
 incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
   select(offense_category, `TDOC Inhouse Inmates`, `TDOC Backup Inmates`, `Locally Sentenced Inmates`,`Statewide Inmates`) %>%
@@ -400,4 +391,49 @@ tmap_mode("view")
 tm_shape(census_votes_income_turnout) +
   tm_polygons(alpha = 0.8, col = "Voter Turnout Interval", id = "NAME") +
   # Make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+  tm_facets
+
+# create 'Offense Type' category column (violent/non-violent)
+crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
+  mutate(offense_category = 
+           ifelse(`Offense Type` %in% 
+                    c( 'Murder', 'Forcible Sex Offense', 'Non-Forcible Sex
+               Offense', 'Forgery/Fraud'),  'violent', 'non-violent'  
+           ))
+View(crime_type_inmate_numbers_clean)
+
+# Create a new dataframe with the proportion of violent and nonviolent crimes
+violence_proportion <- corrections_data %>%
+  # Calculate the total number of crimes (violent + nonviolent) for each county
+  mutate(Total_Crimes = `Violent Crimes` + `Nonviolent Crimes`) %>%
+  
+  # Calculate the proportion of violent and nonviolent crimes
+  mutate(Violent_Proportion = `Violent Crimes` / Total_Crimes,
+         Nonviolent_Proportion = `Nonviolent Crimes` / Total_Crimes) %>%
+  
+  # Select the relevant columns
+  select(County, Violent_Proportion, Nonviolent_Proportion)
+
+# View the resulting dataframe
+View(violence_proportion)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
