@@ -22,13 +22,13 @@
     - sjPlot
     - rnaturalearthhires
 
-### Project Organization 
-  - We created a dedicated folder for our project. Within this folder, we organize subfolders for data (data/), scripts (scripts/),and documentation.  
-  - We created a separate environment using R to manage dependencies and ensure reproducibility.
-  - The team wrote modular scripts/functions that performed specific tasks (data cleaning, analysis, visualization, etc.). We added comments within our code to explain logic, functions, and complex operations. 
-  - We ensured proper handling of data (importing, cleaning, transformation) within scripts. Additionally, we stored raw data in data/raw/ and cleaned data in data/processed/.
-  - Visualizations: Use libraries like ggplot2, geom_bar,and geom_histrogram (R) for creating plots. Save plots in outputs/ folder.
-  - Add New Data
+### File Descriptions
+- `.gitignore` - This file specifies which files should not be pushed to GitHub.
+- `Poster graphs.R` - 
+- `TN-disenfranchisement-2024.Rproj` - This file stores the project settings.
+- `exploratory.R` - 
+- `install_required_packages.R` - This file installs all of the necessary packages to run all of our other scripts.
+- `visualizations.R` - 
 
 ### Credits
 ##### Project Partners
