@@ -22,5 +22,3 @@
 **/*.jS
 # this ignores Cascading Style Sheets
 **/*.css
-# Ignoring the data folder
-data
