@@ -44,9 +44,9 @@ Figure 1.
 ![Voter Turnout](Rplot05.jpeg)
 
 
-This plot shows voter turnout rates. As you can see, the percentage only goes up to 50%. This is because Tennessee has one of the lowest voter turnout rates in the U.S. ().
+In Figure 1, we used ACS US Census data from 2022. This plot shows voter turnout rates by county. As you can see, the percentage never exceeds to 50%. Tennessee has one of the lowest voter turnout rates in the U.S. ().
 
-Figure 2.
+Figure 2. 
 ![Incarceration By Felony](plot plotototroto.jpeg){width=50%}
 
 To obtain Figure 2, we used data from the 2022 Tennessee Department of Corrections on the currently incarcerated population by felony type. One of the most immediately apparent observations from Figure 2 is that 101,666 people convicted of a felony are not due to violent crimes. Therefore, 101,666 could have their rights restored upon release were it not for the convoluted rights restoration process, which includes paying off one's legal financial obligations (LFOs) and restoring one's gun rights (according to the recent Falls v. Goins case).  
@@ -56,23 +56,20 @@ Figure 3.
 
 Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 
 
-Figure 4.
+Figure 4. 
 ![]()
 Using the data from the 2022 Tennessee Department of Corrections and building off of Uggen, Larson, Shannon, and Stewart's (2022) approximation of individuals across Tennessee who are currently post-release, we also estimated the statewide number of individuals who have already been released from incarceration but are still disenfranchised. Figure 4 shows the estimated amount of disenfranchised people across the state either due to violent crimes () or non-violent crimes (). 
 
 
-Figure 5.
+Figures 5 & 6. 
 ![Measuring Correlation Coefficient Value](prop_aa_pop_vt.jpeg){width=400%}
-
-Figure 5 shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. Although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
-
-Figure 6.  
 ![Logistic Regression](tfdr2 (1).jpg){width=70%}  
 
+Figure 5 shows that in the state of Tennessee, voter turnout by county varies from 29.3% to 48.4% and does not depend in a statistically significant way on the African American population or income level. On the other hand, it is important to note that very few counties have an African American population over ~20%. This is notable because, although the African American Tennesseans make up only 17% of the state’s population, 40% of them are state prisoners. Additionally, the bar chart above visualizes that there are currently around 100,000 people incarcerated for felonies in the state of TN; the rest of the disenfranchised population have already served their time and have been released.
 
 Figure 7.   
 ![Highest Income by Category by County](Web capture_16-7-2024_144557_.jpeg){width=90%}   
-This map shows all Tennessee Counties and color codes them by low income counties and middle income counties (Teal being low income, yellow being middle).
+This map shows all Tennessee Counties and color codes them by income category (teal being low income, yellow being middle, no high income counties). The category is determined by taking the income group that takes up the highest proportion of the county. 
 
 
 ```{r echo = FALSE, message = FALSE, warning = FALSE}
