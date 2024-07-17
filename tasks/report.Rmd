@@ -81,11 +81,11 @@ This map shows all Tennessee Counties and color codes them by low income countie
 We found that there are 110,000 individuals currently incarcerated, while an estimated 300,000 individuals have been released from prison and may be eligible to regain their right to vote. There is a direct relationship between counties with high incarceration rates and low voter turnout. Counties with high incarceration rates have never exceeded 50 percent in voter turnout, contributing to Tennessee having the lowest voter turnout in the country.
 
 # Conclusion
-Although the data on disenfranchisement is bare, the impact of our research is substantial. Through the research process, we found that voter disenfranchisement is not discussed enough nor tracked enough. The findings will aid in raising awareness of the issue and the importance of thorough data collection. Additionally, our study highlights the disproportionate impact of disfranchisement on minority communities due to lack of representation by elected officials.
+Although the data on disenfranchisement is bare, the impact of our research is substantial because it fills the gap in the literature on disenfranchisement. 
 
-CAVEATS
-1. We don't know if incarceration is based on where they are convicted, their street address, or where they're imprisoned
-2. We took a state-wide proportion and generalized it to all counties, which is not entirely true to reality. 
+Admittedly, there are limitations to any argument. Due to the lack of systemic tracking of data on formerly and contemporarily incarcerated individuals, our research has a few caveats. First, we do not know if the Tennessee Department of Corrections  data on felon incarceration by county is categorized by the location one is convicted, their street address, or where they are imprisoned. Second, to determine the estimate of possible voters by county, we took a state-wide proportion and generalized it to all counties, which is a rough estimate not necessarily true to reality. Even so, we found that voter disenfranchisement is not discussed enough nor tracked enough. The findings will aid in raising awareness of the issue and the importance of thorough data collection. Additionally, our study highlights the disproportionate impact of disfranchisement on minority communities due to lack of representation by elected officials.
+
+Our work will be used to aid Dr. Franklin, Free Hearts, and the Free the Vote Coalition in their efforts to combat voter disenfranchisement in Tennessee. Our findings will be used in legislative proposals and provided to county governments to underscore the political significance of this issue. Finally, our research serves as academically informed advocacy for legislation to be put in place that leverages votes in support of a new voter enfranchisement/restoration law.
 
 # Bibliography
 Betts-Gaston, Avalon, Christopher Uggen, Ryan Larson, Sarah Shannon, and Robert Stewart. 2022. “Disenfranchisement In 2022.” In _Locked Out 2022: Estimates Of People Denied Voting Rights Due To A Felony Conviction,_ 6–10. The Sentencing Project.  
@@ -119,4 +119,3 @@ Selin, Jennifer L. 2019. “The Best Laid Plans: How Administrative Burden Compl
 Uggen, Christopher, Ryan Larson, Sarah Shannon, and Robert Stewart. 2022. “Summary.” In _Locked Out 2022: Estimates Of People Denied Voting Rights Due To A Felony Conviction,_ 15–18. The Sentencing Project. 
 
 Uggen, Christopher, Ryan Larson, Sarah Shannon, and Robert Stewart. 2023. “The Denial of Voting Rights To People With Criminal Records.” In _Beyond Bars: A Path Forward from 50 Years of Mass Incarceration in the United States,_ 1st edition, eds. Kristen M. Budd, David C. Lane, Glenn W. Muschert, and Jason A. Smith, 73–85. Bristol University Press. https://www.jstor.org/stable/jj.5590542.14 (June 19, 2024).
-
