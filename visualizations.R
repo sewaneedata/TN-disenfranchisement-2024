@@ -13,7 +13,18 @@ library(tidycensus)
 # library(ggplot2)
 library(tidyverse)
 
-  # CENSUS
+# visualizations in this script:
+race_heat
+income_cat_heat
+voter_turnout_race_bar
+voter_turnout_perc_bar
+voter_turnout_perc_inc_cat_bar
+poc_perc_voter_turnout_point
+afr_amr_vote
+afr_amr_perc_vote_point
+voter_turnout_afr_amr
+
+# CENSUS
 
 # upload census csv
 census <- read_csv('data/census.csv')
@@ -104,14 +115,14 @@ View(census_votes_clean)
 
 # heat map for voter turnout (specific percentage)
 tmap_mode("view")
-tm_shape(census_votes_clean) +
+voter_turnout_num_heat <- tm_shape(census_votes_clean) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
 
 # heat map for voter turnout (in percent groups)
 tmap_mode("view")
-tm_shape(census_votes_clean) +
+voter_turnout_perc_heat <- tm_shape(census_votes_clean) +
   tm_polygons(alpha = 0.8, col = c("Voter Turnout (%):"), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
@@ -120,16 +131,14 @@ tm_shape(census_votes_clean) +
 
 # heat map for income level below poverty line and unemployed population 
 tmap_mode("view")
-tm_shape(census_votes_clean) +
+pov_unemp_heat <- pov_tm_shape(census_votes_clean) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
 
-# poverty income / unemployment percentage map [here]
-
 #heat map for income
 tmap_mode("plot")
-tm_shape(census_votes_clean) +
+income_heat <- tm_shape(census_votes_clean) +
   tm_polygons(alpha = 0.8, col = c('lessthan10k', 'btwn10kand19999', 'btwn20kand34999', 'btwn35kand49999', 'btwn50kand74999', 'btwn75kand99999', 'over100k'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -157,7 +166,7 @@ View(census_votes_clean_category1)
 
 #heat map for income category
 tmap_mode("plot")
-tm_shape(census_votes_clean_category1) +
+income_cat_heat <- tm_shape(census_votes_clean_category1) +
   tm_polygons(alpha = 0.8, col = c('low_income_perc', 'middle_income_perc', 'high_income_perc'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -166,7 +175,7 @@ tm_shape(census_votes_clean_category1) +
 
 #heat map for race
 tmap_mode("plot")
-tm_shape(census_votes_clean_category1) +
+race_heat <- tm_shape(census_votes_clean_category1) +
   tm_polygons(alpha = 0.8, col = c('white_', 'afr_amr', 'nativeamr', 'asian', 'pac_isl', 'otherrace'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -204,7 +213,7 @@ View(census_votes_clean_category2)
 # View(avg_perc_voter_turnout_race)
 
 # plot average voter turnout rates by race via bar chart
-ggplot(census_votes_clean_category2, aes(x = race_code, y = `Voter Turnout (%):`)) +
+voter_turnout_race_bar <- ggplot(census_votes_clean_category2, aes(x = race_code, y = `Voter Turnout (%):`)) +
   stat_summary(fun = "mean", geom = "bar", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Racial Demographic",
        x = "Race",
@@ -213,7 +222,7 @@ ggplot(census_votes_clean_category2, aes(x = race_code, y = `Voter Turnout (%):`
 
   # CENSUS & VOTER TURNOUT
 
-ggplot(census_votes, aes(x = `Voter Turnout (%):`), binwidth = 20) +
+voter_turnout_perc_bar <- ggplot(census_votes, aes(x = `Voter Turnout (%):`), binwidth = 20) +
   geom_histogram() +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate (per TN County)",
@@ -221,17 +230,8 @@ ggplot(census_votes, aes(x = `Voter Turnout (%):`), binwidth = 20) +
   theme_minimal()
 
 # plot average voter turnout rates by income category via bar chart
-ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+voter_turnout_perc_inc_cat_bar <- ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
-  labs(title = "Average Voter Turnout Rate by Highest Income Category",
-       x = "Highest Income Category",
-       y = "Average Voter Turnout Rate (%)") +
-  theme_minimal()
-
-# plot average voter turnout rates by income category via bar chart
-ggplot(census_votes, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
-  geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
-  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
        x = "Highest Income Category",
        y = "Average Voter Turnout Rate (%)") +
@@ -244,22 +244,17 @@ mean(census_votes_clean_category2$`Voter Turnout (%):`)
 range(census_votes_clean_category2$`Voter Turnout:`)
 # 29.27%, 48.35%
 
-ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout:`, y = poverty_income)) +
+vote_pov_point <- ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout:`, y = poverty_income)) +
   geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = low_income_perc)) +
+vote_low_inc_perc_point <-ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = low_income_perc)) +
   geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = middle_income_perc)) +
+vote_middle_inc_perc_point <- ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = middle_income_perc)) +
   geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = high_income_perc)) +
+vote_high_inc_perc_point <- ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = high_income_perc)) +
   geom_point(color = "darkseagreen3")
-ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = highest_income_cat)) +
+vote_high_inc_point <- ggplot(data = census_votes_clean_category2, aes( x = `Voter Turnout (%):`, y = highest_income_cat)) +
   geom_point(color = "darkseagreen3")
 # if you're a low income category county, you're more likely to have a voter turnout rate that's higher   than average
-
-mod1 <- lm(`Voter Turnout (%):` ~ highest_income_cat, data = census_votes_clean_category2)
-summary(mod1)
-mod2 <- lm(`Voter Turnout (%):` ~ poverty_income, data = census_votes_clean_category2)
-summary(mod2)
 
 # in counties where there's a higher proportion of people of color, is voter turnout higher/lower?
 poc_vote <- cor(census_votes_clean_category2$poc_perc, census_votes_clean_category2$`Voter Turnout (%):`)
@@ -267,7 +262,7 @@ print(poc_vote)
   # -0.1256031, negative correlation
 
 # scatter plot of proportion of POC vs. voter turnout
-ggplot(census_votes_clean_category2, aes(x = poc_perc, y = `Voter Turnout (%):`)) +
+poc_perc_voter_turnout_point <- ggplot(census_votes_clean_category2, aes(x = poc_perc, y = `Voter Turnout (%):`)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE, color = "blue") +
   labs(title = "Proportion of People of Color vs. Voter Turnout",
@@ -281,7 +276,7 @@ print(afr_amr_vote)
 # -0.1111298, negative correlation
 
 # scatter plot of proportion of afr_amr vs. voter turnout
-ggplot(census_votes_clean_category2, aes(x = afr_amr_perc, y = `Voter Turnout (%):`)) +
+afr_amr_perc_vote_point <- ggplot(census_votes_clean_category2, aes(x = afr_amr_perc, y = `Voter Turnout (%):`)) +
   geom_point() +
   ylim(0,100) +
   labs(title = "Proportion of African Americans vs. Voter Turnout",
@@ -292,14 +287,14 @@ ggplot(census_votes_clean_category2, aes(x = afr_amr_perc, y = `Voter Turnout (%
        Correlation Coefficient Value: -0.1256031") +
   theme_minimal()
 
-# bar chart of proportion of afr_amr vs. voter turnout
-ggplot(census_votes_clean_category2, aes(x = afr_amr_perc)) +
-  geom_histogram() +
-  #geom_smooth(method = "lm", se = FALSE, color = "blue") +
-  labs(title = "Proportion of African Americans in Population vs. Voter Turnout",
-       x = "Proportion of African Americans in Population",
-       y = "Voter Turnout (%)") +
-  theme_minimal()
+# # bar chart of proportion of afr_amr vs. voter turnout
+# ggplot(census_votes_clean_category2, aes(x = afr_amr_perc)) +
+#   geom_histogram() +
+#   #geom_smooth(method = "lm", se = FALSE, color = "blue") +
+#   labs(title = "Proportion of African Americans in Population vs. Voter Turnout",
+#        x = "Proportion of African Americans in Population",
+#        y = "Voter Turnout (%)") +
+#   theme_minimal()
 
 # create a third dataset that still has afr_amr from c1 but also has t_r_t from c2
 census_votes_clean_category3 <- census_votes_clean_category1 %>% 
@@ -351,37 +346,12 @@ tab_model(fit,
 logistic_df2 <- logistic_df %>%
   mutate(predicted_prob = predict(fit, type = "response"))
 
-# plot predicted probabilities against black_population
-ggplot(logistic_df2, aes(x = black_pop, y = predicted_prob)) +
+# plot predicted probabilities against afr_amr population
+voter_turnout_afr_amr <- ggplot(logistic_df2, aes(x = black_pop, y = predicted_prob)) +
   geom_point() +
   geom_smooth(method = "loess", se = FALSE) +
   labs(title = "Predicted Probability of Voter Turnout by Black Population",
        x = "Percentage of Black Population",
        y = "Predicted Probability of Voter Turnout") +
   theme_minimal()
-
-
-
-# RESULTS
-# # map crime and incarceration rates
-# tmap_mode("plot")
-# tm_shape(census_votes_clean_category2) +
-#   tm_polygons(alpha = 0.8, col = c("correction_data_1","crime"), id = "NAME") +
-#   # make several layered maps that you can toggle between
-#   tm_facets(as.layers = TRUE)
-# 
-# # Plotting the map
-# ggplot(data = census_votes, aes(x = census, y = census_votes, group = group, fill = crime)) +
-#   geom_polygon (color = "black") +
-#   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
-#                       na.value = "grey50", guide = "legend") +
-#   labs(title = "Incarceration Rates by County") +
-#   theme_minimal()
-# #barchart Incarceration Rates by Felony
-# ggplot(data = census_votes, aes(x = correction_data_1, y = census, group = group, fill = rate)) +
-#   geom_bar(color = "blue") +
-#   scale_fill_gradient(name = "Incarceration Rate", low = "lightblue", high = "darkblue",
-#                       na.value = "grey50", guide = "legend") +
-#   labs(title = "Incarceration Rates by Felony") +
-#   theme_minimal()
 
