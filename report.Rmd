@@ -41,15 +41,13 @@ We merged the aforementioned datasets to create original ones, enabling us to ap
 We built the Tennessee county map (see Figure 1) to illustrate the patterns in the voter turnout and compare with the demographics of each county. Then, we charted the incarceration rate by felony type (see Figure 2) to get an estimate of the ratio of individuals who have the possibility of restoring their rights upon release versus those who do not. 
 
 Figure 1. Voter Turnout Percentages
-```{r, echo = FALSE, message = FALSE, warning = FALSE }
+```{r, echo = FALSE, message = FALSE, warning = FALSE, results = 'hide'}
 # download data
 source('../TN-disenfranchisement-2024/exploratory.R')
 
 # load figure 1 from exploratory.R
 voter_turnout_perc_heat
-# ![Voter Turnout](Rplot05.jpeg)
 ```
-
 
 In Figure 1, we used ACS US Census data from 2022. This plot shows voter turnout rates by county. As you can see, the percentage never exceeds to 50%. Tennessee has one of the lowest voter turnout rates in the U.S. ().
 
@@ -60,7 +58,7 @@ source('../TN-disenfranchisement-2024/poster_graphs.R')
 
 # get chart from poster_graphs.R
 # ![Incarceration By Felony](plot plotototroto.jpeg){width=50%}
-print(incar_by_felony_c)
+incar_by_felony_c
 ```
 
 To obtain Figure 2, we used data from the 2022 Tennessee Department of Corrections on the currently incarcerated population by felony type. One of the most immediately apparent observations from Figure 2 is that 101,666 people convicted of a felony are not due to violent crimes. Therefore, 101,666 could have their rights restored upon release were it not for the convoluted rights restoration process, which includes paying off one's legal financial obligations (LFOs) and restoring one's gun rights (according to the recent Falls v. Goins case).  
@@ -70,7 +68,7 @@ Figure 3. Estimate of Potential Voters
 # load in the data
 source('../TN-disenfranchisement-2024/exploratory.R')
 # comes from exploratory
-print(potential_voters)
+potential_voters
 # ![Potential voters](potential_voters.jpeg){width=50%}
 ```
 Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 

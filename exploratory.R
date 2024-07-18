@@ -47,7 +47,7 @@ library(ggthemes)
 # upload census csv
 # from us census bureau
 census <- read_csv('data/census.csv')
-##View(census)
+#View(census)
 
 # get data for all counties in Tennessee
 # choose which tracts to keep
@@ -237,11 +237,12 @@ voter_turnout_num_heat <- tm_shape(census_votes_income_race_turnout) +
 #print(voter_turnout_num_heat)
 
 # heat map for voter turnout percentage
-tmap_mode("view")
+tmap_mode("plot")
 voter_turnout_perc_heat <- tm_shape(census_votes_income_race_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
   # make several layered maps that you can toggle between
-  tm_facets(as.layers = TRUE)
+  tm_facets(as.layers = TRUE) +
+  tm_layout( legend.position = c(0.85,0))
 
 # heat map for voter turnout interval
 tmap_mode("view")
