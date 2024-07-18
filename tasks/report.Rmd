@@ -52,9 +52,10 @@ Figure 2.
 To obtain Figure 2, we used data from the 2022 Tennessee Department of Corrections on the currently incarcerated population by felony type. One of the most immediately apparent observations from Figure 2 is that 101,666 people convicted of a felony are not due to violent crimes. Therefore, 101,666 could have their rights restored upon release were it not for the convoluted rights restoration process, which includes paying off one's legal financial obligations (LFOs) and restoring one's gun rights (according to the recent Falls v. Goins case).  
 
 Figure 3. 
-```{r echo = FALSE, message = FALSE, warning = FALSE}
-disenf_by_county
-```
+![Potential voters](potential_voters.jpeg){width=50%}
+<!-- ```{r echo = FALSE, message = FALSE, warning = FALSE} -->
+<!-- potential_voters -->
+<!-- ``` -->
 Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 
 
 Figure 4. 
