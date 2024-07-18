@@ -25,6 +25,7 @@
 # disenf_by_county
 # inca_afr_amr_point
 # potential_voters
+# vote_income_bar
 
 #load in libraries
 library(sf)
@@ -46,7 +47,7 @@ library(ggthemes)
 # upload census csv
 # from us census bureau
 census <- read_csv('data/census.csv')
-View(census)
+##View(census)
 
 # get data for all counties in Tennessee
 # choose which tracts to keep
@@ -100,7 +101,7 @@ pov_unemp_heat <- tm_shape(pivot_acs) +
 # upload tn voting by county csv
 # from secretary of state for year 2022
 votes <- read_csv('data/tn_county_votes.csv')
-View(votes)
+#View(votes)
 
 # clean votes
 votes_clean <- votes %>%
@@ -111,22 +112,22 @@ votes_clean <- votes %>%
 # in pivot_acs, delete ", Tennessee" and create a new column "County" from "NAME"
 pivot_acs <- pivot_acs %>%
   mutate(County = gsub(" County, Tennessee", "", NAME), .after = NAME)
-View(pivot_acs)
+#View(pivot_acs)
 
 # in votes, remove ", Tennessee" and rename the column "County"
 votes_clean2 <- votes_clean %>%
   rename(County = "County:")
-View(votes)
+#View(votes)
 
 # join df columns by "County" to create census_votes
 census_votes <- left_join(votes_clean2, pivot_acs, by = "County")
-View(census_votes)
+#View(census_votes)
 
 # create income column
 # census_votes <- census_votes %>%
 #   pivot_longer(cols = starts_with('btwn'),
 #                values_to = 'income')
-# View(census_votes)
+# #View(census_votes)
 #PROBLEMS:
   #turned btwn columns into new column, which means they're gone
   #does not include under 10k and over 100k
@@ -168,7 +169,7 @@ census_votes_income <- census_votes_sf %>%
     low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
     middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
     high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"))
-View(census_votes_income)
+#View(census_votes_income)
 
 # heat map for number of people in each income category
 tmap_mode("view")
@@ -176,7 +177,7 @@ income_cat_heat <- tm_shape(census_votes_income) +
   tm_polygons(alpha = 0.8, col = c('low_income_percent', 'middle_income_percent', 'high_income_percent'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
-print(income_cat_heat)
+#print(income_cat_heat)
 
 # heat map for number of people in each income category
 tmap_mode("view")
@@ -208,73 +209,48 @@ census_votes_income_race <- census_votes_income %>%
     afr_amr_percent = (afr_amr / race_tally) * 100,
     poc_percent = (poc_tally / race_tally) * 100
   )
-View(census_votes)
+#View(census_votes)
 
 # VOTER TURNOUT
 
-# census_votes_income_race_turnout <- census_votes_income_race %>%
-#   mutate(`Voter Turnout (%)` = gsub("%", "", `Voter Turnout:`)) %>% 
-#   mutate(`Voter Turnout (%)` = as.numeric(`Voter Turnout (%)`)) %>%
-
 # remove % sign from values in voter turnout
-census_votes_income_race_turnout <- census_votes_income_race_turnout %>%
+census_votes_income_race_turnout <- census_votes_income_race %>%
   mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`)) %>% 
   # convert the 'Voter Turnout:' column to numeric if it's not already
   mutate(`Voter Turnout (%):` = as.numeric(`Voter Turnout (%):`)) %>% 
   # create voter turnout in percentile intervals so they're not intervals of 2% each
-  mutate(voter_turnout_interval = cut(`Voter Turnout (%):`,
-                                      breaks = c(0.00, 25.00, 50.00, 75.00, 100.00),
-                                      labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
+  mutate(`Voter Turnout Interval` = cut(`Voter Turnout (%):`,
+                                      breaks = c(20, 25, 30, 35, 40, 45, 50),
+                                      labels = c("20-25%", "25-30%", "30-35%", "35-40%", "40-45%", "45-50%"),
                                       include.lowest = TRUE))
-View(census_votes_income_race_turnout)
+#View(census_votes_income_race_turnout)
 
-# # remove % sign from values in voter turnout
-# census_votes_income_turnout <- census_votes_income %>%
-#   mutate(`Voter Turnout (%):` = gsub("%", "", `Voter Turnout:`)) %>% 
-#   # convert the 'Voter Turnout:' column to numeric if it's not already
-#   mutate(`Voter Turnout (%):` = as.numeric(`Voter Turnout (%):`)) %>% 
-#   # create voter turnout in percentile intervals so they're not intervals of 2% each
-#   mutate(`Voter Turnout Interval` = cut(`Voter Turnout (%):`,
-#                                       breaks = c(20.00, 23.00, 26.00, 29.00, 32.00, 35.00, 38.00, 41.00, 44.00, 47.00, 50.00),
-#                                       labels = c("20-23%", "23-26%", "26-29%", "29-32%", "32-35%", "35-38%", "38-41%", "41-44%", "44-47%", "47-50%"),
-#                                       include.lowest = TRUE))
-# View(census_votes_income_turnout)
-
-# heat map for voter turnout
+# heat map for voter turnout number
 tmap_mode("view")
 voter_turnout_num_heat <- tm_shape(census_votes_income_race_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout:'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
-print(voter_turnout_num_heat)
+#print(voter_turnout_num_heat)
 
-# heat map for voter turnout
+# heat map for voter turnout percentage
 tmap_mode("view")
 voter_turnout_perc_heat <- tm_shape(census_votes_income_race_turnout) +
   tm_polygons(alpha = 0.8, col = c('Voter Turnout (%):'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
-# heat map for voter turnout
+# heat map for voter turnout interval
 tmap_mode("view")
 voter_turnout_int_heat <- tm_shape(census_votes_income_race_turnout) +
-  tm_polygons(alpha = 0.8, col = c(`voter_turnout_interval`), id = "NAME") +
-  # make several layered maps that you can toggle between
+  tm_polygons(alpha = 0.8, col = "Voter Turnout Interval", id = "NAME") +
+  # Make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
-print(voter_turnout_int_heat)
+#print(voter_turnout_int_heat)
 
 # plot average voter turnout rates by income category via bar chart
-ggplot(census_votes_income_race_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
+vote_income_bar <- ggplot(census_votes_income_race_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
   geom_bar(stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
-  #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
-  labs(title = "Average Voter Turnout Rate by Highest Income Category",
-       x = "Highest Income Category",
-       y = "Average Voter Turnout Rate (%)") +
-  theme_minimal()
-
-# plot average voter turnout rates by income category via line graph
-ggplot(census_votes_income_race_turnout, aes(x = highest_income_cat, y = `Voter Turnout (%):`)) +
-  geom_line() +
   #geom_bar()#stat = "summary", fun = "mean", fill = "blue", alpha = 0.7) +
   labs(title = "Average Voter Turnout Rate by Highest Income Category",
        x = "Highest Income Category",
@@ -283,7 +259,7 @@ ggplot(census_votes_income_race_turnout, aes(x = highest_income_cat, y = `Voter 
 
 # read in crime csv
 crime <- read_csv('data/tennessee.csv')
-View(crime)
+#View(crime)
 names(crime)
 
 # remove empty columns and NAs
@@ -291,9 +267,9 @@ crime_clean <- crime %>%
   select(-...13) %>%
   select(-...14) %>%
   select(-...15) %>%
-  select(-...16) %>%
-  filter(!is.na(`Metropolitan/Nonmetropolitan`))
-View(crime_clean)
+  select(-...16) #%>%
+  #filter(!is.na(`Metropolitan/Nonmetropolitan`))
+#View(crime_clean)
 
 # read in corrections csvs
   # todc statistical abstract 2022
@@ -302,11 +278,11 @@ View(crime_clean)
     # 85% refers to legislation that states that a convicted defendant must serve minimum of 85% of       their sentence b4 eligible for parole
 # name <- read_excel("data/name.xlsx")
 crime_type_inmate_numbers <- read_csv("data/corrections1.csv")
-View(crime_type_inmates)
+#View(crime_type_inmates)
   # todc statistical abstract 2023
     # felon population by county of conviction as of June 30, 2022
 county_incarceration_numbers <- read_csv("data/corrections2.csv")
-View(county_incarceration_numbers)
+#View(county_incarceration_numbers)
 
 # create the new column 'TDOC (%)' and remove '%' sign in tdoc, backup, local, systemwide
 county_incarceration_numbers_clean <- county_incarceration_numbers %>%
@@ -320,11 +296,11 @@ county_incarceration_numbers_clean <- county_incarceration_numbers %>%
   #        breaks = c(0, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000),
   #        labels = c(),
   #        include.lowest = TRUE)
-View(county_incarceration_numbers_clean)
+#View(county_incarceration_numbers_clean)
 
 # join census votes and incarceration by county columns by "County"
 census_votes_corrections <- left_join(census_votes_income_race_turnout, county_incarceration_numbers_clean, by = "County")
-View(census_votes_corrections)
+#View(census_votes_corrections)
 
 # convert dataframe into a sf type object
 #census_votes_corrections_sf <- st_as_sf(county_incarceration_numbers_clean)
@@ -383,7 +359,7 @@ crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
                     c( 'Murder', 'Forcible Sex Offense', 'Non-Forcible Sex
                Offense', 'Forgery/Fraud'),  'violent', 'non-violent'  
            ))
-View(crime_type_inmate_numbers_clean)
+#View(crime_type_inmate_numbers_clean)
 
 # make offense type categorical (non-violent = 0, violent = 1) for visualization
 binary_incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
@@ -400,7 +376,7 @@ inc_by_felony <- ggplot(binary_incarceration_by_felony, aes(x = offense_category
        y = "Count") +
   theme_fivethirtyeight() +  # Apply theme_fivethirtyeight
   scale_x_discrete(labels = c("non-violent" = "Non-Violent", "violent" = "Violent"))
-print (violent_nonviolent)
+#print (violent_nonviolent)
 
 # estimate the violence/nonviolence by county, proportional to the number of inmates who have been incarcerated by violent/nonviolent crimes to determine disenfranchisement by county
 
@@ -411,7 +387,7 @@ crime_type_inmate_numbers_clean <- crime_type_inmate_numbers %>%
                     c( 'Murder', 'Forcible Sex Offense', 'Non-Forcible Sex
                Offense', 'Forgery/Fraud'),  'violent', 'non-violent'  
            ))
-View(crime_type_inmate_numbers_clean)
+#View(crime_type_inmate_numbers_clean)
 
 # make offense type categorical (non-violent = 0, violent = 1) for visualization
 binary_incarceration_by_felony <- crime_type_inmate_numbers_clean %>%
@@ -434,11 +410,11 @@ nonviolent_proportion <- 1 - violent_proportion
 county_inmates_estimate <- county_incarceration_numbers_clean %>%
   mutate(violent_inmates = `Total #` * violent_proportion,
          non_violent_inmates = `Total #` * nonviolent_proportion)
-View(county_inmates_estimate)
+#View(county_inmates_estimate)
 
 # join df columns by "County" to create census_votes
 county_census_votes_corrections <- left_join(census_votes_corrections, county_inmates_estimate, by = "County")
-View(county_census_votes_corrections)
+#View(county_census_votes_corrections)
 
 # convert dataframe into a sf type object
 county_census_votes_corrections_sf <- st_as_sf(county_census_votes_corrections)
@@ -450,16 +426,15 @@ disenf_by_county <- tm_shape(county_census_votes_corrections_sf) +
   tm_polygons(alpha = 0.8, col = c('violent_inmates','non_violent_inmates'), id = "NAME", breaks = legend_breaks2) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
-print(disenf_by_county)
+#print(disenf_by_county)
 
 # no. of potential voters
-legend_breaks2 <- c(0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000)
 tmap_mode("plot")
 potential_voters <- tm_shape(county_census_votes_corrections_sf) +
   tm_polygons(alpha = 0.8, col = c('non_violent_inmates'), id = "NAME", breaks = legend_breaks2) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
-print(potential_voters)
+#print(potential_voters)
 
 # relationship with no. people incarcerated and proprotion of people of color in TN counties
 inca_poc_point <-  ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +

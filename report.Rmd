@@ -41,6 +41,13 @@ We merged the aforementioned datasets to create original ones, enabling us to ap
 We built the Tennessee county map (see Figure 1) to illustrate the patterns in the voter turnout and compare with the demographics of each county. Then, we charted the incarceration rate by felony type (see Figure 2) to get an estimate of the ratio of individuals who have the possibility of restoring their rights upon release versus those who do not. 
 
 Figure 1. 
+```{r, echo = FALSE, message = FALSE, warning = FALSE }
+# download data
+source('../TN-disenfranchisement-2024/Poster graphs.R')
+
+# load figure 1
+```
+
 ![Voter Turnout](Rplot05.jpeg)
 
 
@@ -73,42 +80,52 @@ Figure 7.
 This map shows all Tennessee Counties and color codes them by income category (teal being low income, yellow being middle, no high income counties). The category is determined by taking the income group that takes up the highest proportion of the county. 
 
 Figure 8. 
-```{r echo = FALSE, message = FALSE, warning = FALSE }
+```{r, echo = FALSE, message = FALSE, warning = FALSE }
 # comes from exploratory.R
-# relationship with no. people incarcerated and proprotion of people of color in TN counties
-inca_poc_point
+# load in the data
+source('../TN-disenfranchisement-2024/exploratory.R')
+# relationship with no. people incarcerated and proportion of people of color in TN counties
+print(inca_poc_point)
 ```
 In Figure 8, each dot is equivalent to a county. POC stands for 'person of color' and is determined via ACS Census Bureau tracts-- African American, Native American, Asian, Pacific Islander, and Other. This shows a slightly positively correlated relationship between the number people incarcerated and proportion of people of color in TN counties. In other words, as the number of people of color in a county increases, so does the rate of incarceration. This correlation is not inherently causal, but is worth exploring further.
 
 Figure 9. 
-```{r echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# comes from exploratory.R
+# relationship with no. people incarcerated and proprotion of people in poverty in TN counties
 inca_pov_point
 ```
 In Figure 9, each dot is equivalent to a county. Poverty income levels is determined via ACS Census Bureau tracts-- The number of households that make an income below poverty level over the course of 12 months. This shows a slightly positively correlated relationship between the number people incarcerated and the number of households that classify as under the poverty line over the course of the year in TN counties. In other words, as the number of households under the poverty line increases, so does the rate of incarceration. This correlation is not inherently causal, but is worth exploring further.
 
 Figure 10. 
-```{r echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# comes from exploratory.R
+# heat map for number of people in each income category
 income_cat_heat
 ```
 What percent of population is of each income type (low, middle, high) in each county. 
 
 
 Figure 11. 
-```{r echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# comes from exploratory.R
+# heat map for voter turnout percentage
 voter_turnout_perc_heat
 ```
 More detailed percent voter turnout by county.
 
 
 Figure 12. 
-```{r echo = FALSE, message = FALSE, warning = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+# comes from exploratory.R
+# number of people incarcerated in each county
 county_inc_heat
 ```
 Number of people incarcerated in each county.
 
 # Conclusion
 
-We found that there are 101,666 individuals currently incarcerated, and an estimated 300,000 individuals have been released from prison, who may be eligible to regain their right to vote. There is a direct relationship between counties with high incarceration rates and low voter turnout. Counties with high incarceration rates have never exceeded 50 percent in voter turnout, contributing to Tennessee having the lowest voter turnout in the country.
+We found that there are 101,666 individuals currently incarcerated, and an estimated 330,706 individuals have been released from prison, who may be eligible to regain their right to vote. There is a direct relationship between counties with high incarceration rates and low voter turnout. Counties with high incarceration rates have never exceeded 50 percent in voter turnout, contributing to Tennessee having the lowest voter turnout in the country.
 Although the data on disenfranchisement is bare, the impact of our research is substantial because it fills the gap in the literature on disenfranchisement. 
 
 Admittedly, there are limitations to any argument. Due to the lack of systemic tracking of data on formerly and contemporarily incarcerated individuals, our research has a few caveats. First, we do not know if the Tennessee Department of Corrections  data on felon incarceration by county is categorized by the location one is convicted, their street address, or where they are imprisoned. Second, to determine the estimate of possible voters by county, we took a state-wide proportion and generalized it to all counties, which is a rough estimate not necessarily true to reality. Even so, we found that voter disenfranchisement is not discussed enough nor tracked enough. The findings will aid in raising awareness of the issue and the importance of thorough data collection. Additionally, our study highlights the disproportionate impact of disfranchisement on minority communities due to lack of representation by elected officials.
