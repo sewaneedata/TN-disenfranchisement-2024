@@ -24,11 +24,11 @@
 
 ### File Descriptions
 - `.gitignore` - This file specifies which files should not be pushed to GitHub.
-- `Poster graphs.R` - 
+- `Poster graphs.R` - This script contains the findings we included in our DataFest Poster and DataFest slides.
 - `TN-disenfranchisement-2024.Rproj` - This file stores the project settings.
-- `exploratory.R` - 
+- `exploratory.R` - Run this script first. This script merges and scopes out the data we found.
 - `install_required_packages.R` - This file installs all of the necessary packages to run all of our other scripts.
-- `visualizations.R` - 
+- `visualizations.R` - This script contains our visualizations of the data. 
 
 ### Credits
 ##### Project Partners
