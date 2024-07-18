@@ -156,8 +156,8 @@ income_heat <- tm_shape(census_votes_sf) +
 # categories determined by literature estimates in review
 census_votes_income <- census_votes_sf %>%
   mutate(low_income = lessthan10k + btwn10kand19999 + btwn20kand34999,
-    middle_income = btwn35kand49999 + btwn50kand74999,
-    high_income = btwn75kand99999 + over100k) %>% 
+    middle_income = btwn35kand49999 + btwn50kand74999 + btwn75kand99999, 
+    high_income = over100k) %>% 
   # total no. of households that have an income, census
   mutate(income_tally = low_income + middle_income + high_income) %>% 
   # create columns with the percentage of people in each income category
@@ -168,13 +168,16 @@ census_votes_income <- census_votes_sf %>%
   mutate(highest_income_cat = case_when(
     low_income_percent >= middle_income_percent & low_income_percent >= high_income_percent ~ "low income",
     middle_income_percent >= low_income_percent & middle_income_percent >= high_income_percent ~ "middle income",
-    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income"))
+    high_income_percent >= low_income_percent & high_income_percent >= middle_income_percent ~ "high income")) %>% 
+  rename('Low income (%)' = low_income_percent,
+         'Middle income (%)' = middle_income_percent,
+         'High income (%)' = high_income_percent)
 #View(census_votes_income)
 
 # heat map for number of people in each income category
 tmap_mode("view")
 income_cat_heat <- tm_shape(census_votes_income) +
-  tm_polygons(alpha = 0.8, col = c('low_income_percent', 'middle_income_percent', 'high_income_percent'), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('Low income (%)', 'Middle income (%)', 'High income (%)'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 #print(income_cat_heat)
@@ -182,7 +185,7 @@ income_cat_heat <- tm_shape(census_votes_income) +
 # heat map for number of people in each income category
 tmap_mode("view")
 low_middle_high_heat <- tm_shape(census_votes_income) +
-  tm_polygons(alpha = 0.8, col = c('low_income', 'middle_income', 'high_income'), id = "NAME") +
+  tm_polygons(alpha = 0.8, col = c('Low income (%)', 'Middle income (%)', 'High income (%)'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 
@@ -260,7 +263,7 @@ vote_income_bar <- ggplot(census_votes_income_race_turnout, aes(x = highest_inco
 # read in crime csv
 crime <- read_csv('data/tennessee.csv')
 #View(crime)
-names(crime)
+#names(crime)
 
 # remove empty columns and NAs
 crime_clean <- crime %>%
@@ -342,13 +345,13 @@ total_county_inc_heat <- tm_shape(census_votes_corrections) +
 
 #multiple regression
 total_mr <- lm(`Voter Turnout (%):` ~ `Total #` + highest_income_cat + poc_tally, data = census_votes_corrections)
-summary(total_mr)
+#summary(total_mr)
 
 #linear regression
 inca_inco_lr <- lm(`Total #` ~ `highest_income_cat`, data = census_votes_corrections)
-summary(inca_inco_lr)
+#summary(inca_inco_lr)
 inca_poc_lr <- lm(`Total #` ~ `poc_tally`, data = census_votes_corrections)
-summary(inca_poc_lr)
+#(inca_poc_lr)
 
 # CRIME TYPE
 
@@ -438,27 +441,17 @@ potential_voters <- tm_shape(county_census_votes_corrections_sf) +
 
 # relationship with no. people incarcerated and proprotion of people of color in TN counties
 inca_poc_point <-  ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +
-  geom_point(color = "darkseagreen3")
+  labs(y = 'People of Color') +
+  geom_point(color = "darkseagreen3") +
+  theme_minimal()
 
 # relationship with no. people incarcerated and proprotion of people in poverty in TN counties
 inca_pov_point <- ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poverty_income)) +
-  geom_point(color = "darkseagreen3")
+  geom_point(color = "darkseagreen3") +
+  theme_minimal()
 
 # relationship with no. people incarcerated and proprotion of african americans in TN counties
 inca_afr_amr_point <- ggplot(data = census_votes_corrections, aes( x = `Total #`, y = afr_amr_percent)) +
   geom_point(color = "darkseagreen3")
   # less to do with afr. amr. population as a whole?
-
-
-
-
-
-
-
-
-
-
-
-
-
 

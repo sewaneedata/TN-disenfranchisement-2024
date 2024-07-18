@@ -14,21 +14,21 @@ library(tidycensus)
 library(tidyverse)
 
 # visualizations in this script:
-race_heat
-income_cat_heat
-voter_turnout_race_bar
-voter_turnout_perc_bar
-voter_turnout_perc_inc_cat_bar
-poc_perc_voter_turnout_point
-afr_amr_vote
-afr_amr_perc_vote_point
-voter_turnout_afr_amr
+# race_heat
+# income_cat_heat
+# voter_turnout_race_bar
+# voter_turnout_perc_bar
+# voter_turnout_perc_inc_cat_bar
+# poc_perc_voter_turnout_point
+# afr_amr_vote
+# afr_amr_perc_vote_point
+# voter_turnout_afr_amr
 
 # CENSUS
 
 # upload census csv
 census <- read_csv('data/census.csv')
-View(census)
+#view(census)
 
 # get data for all counties in Tennessee
 acs <- get_acs(geography = "county",
@@ -73,14 +73,14 @@ pivot_acs <- acs %>%
   pivot_wider(names_from = variable, values_from = estimate) %>%
   # in pivot_acs, delete ", Tennessee" and create a new column "County" from "NAME"
   mutate(County = gsub(" County, Tennessee", "", NAME), .after = NAME)
-View(pivot_acs)
+#view(pivot_acs)
 
   # VOTER TURNOUT
 
 # upload tn voting by county csv
 # from secretary of state for year 2022
 votes <- read_csv('data/tn_county_votes.csv')
-View(votes)
+#view(votes)
 
 # clean up votes
 votes_clean <- votes %>% 
@@ -89,17 +89,17 @@ votes_clean <- votes %>%
   select(-'...9') %>% 
 # in votes, remove ", Tennessee" and rename the column "County"
   rename(County = "County:")
-View(votes_clean)
+#view(votes_clean)
 
 # JOIN CENSUS & VOTER TURNOUT
 
 # join df columns by "County" to create census_votes
 census_votes <- left_join(votes_clean, pivot_acs, by = "County")
-View(census_votes)
+#view(census_votes)
 
 # convert dataframe into a sf type object
 census_votes_sf <- st_sf(census_votes)
-View(census_votes_sf)
+#view(census_votes_sf)
 
 # remove % sign from values in voter turnout
 census_votes_clean <- census_votes_sf %>%
@@ -111,7 +111,7 @@ census_votes_clean <- census_votes_sf %>%
                                       breaks = c(0.00, 25.00, 50.00, 75.00, 100.00), 
                                       labels = c("0-25%", "25-50%", "50-75%", "75-100%"),
                                       include.lowest = TRUE))
-View(census_votes_clean)
+#view(census_votes_clean)
 
 # heat map for voter turnout (specific percentage)
 tmap_mode("view")
@@ -131,7 +131,7 @@ voter_turnout_perc_heat <- tm_shape(census_votes_clean) +
 
 # heat map for income level below poverty line and unemployed population 
 tmap_mode("view")
-pov_unemp_heat <- pov_tm_shape(census_votes_clean) +
+pov_unemp_heat <- tm_shape(census_votes_clean) +
   tm_polygons(alpha = 0.8, col = c('poverty_income', 'unemployed'), id = "NAME") +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE) 
@@ -162,7 +162,7 @@ census_votes_clean_category1 <- census_votes_clean %>%
     middle_income_perc >= low_income_perc & middle_income_perc >= high_income_perc ~ "middle income",
     high_income_perc >= low_income_perc & high_income_perc >= middle_income_perc ~ "high income"
   ))
-View(census_votes_clean_category1)
+#view(census_votes_clean_category1)
 
 #heat map for income category
 tmap_mode("plot")
@@ -196,7 +196,7 @@ census_votes_clean_category2 <- census_votes_clean_category1 %>%
                names_to = "race_code", 
                values_to = "total_race_tally")
   #mutate(voter_race = )
-View(census_votes_clean_category2)
+#view(census_votes_clean_category2)
 
 # # plot average voter turnout rates by race via bar chart
 # ggplot(census_votes, aes(x = race_tally, y = `Voter Turnout:`)) +
@@ -210,7 +210,7 @@ View(census_votes_clean_category2)
 # avg_perc_voter_turnout_race <- census_votes_clean_category2 %>%
 #   group_by(race_code) %>%
 #   summarize(average_turnout = mean(`Voter Turnout (%):`, na.rm = TRUE))
-# View(avg_perc_voter_turnout_race)
+# #view(avg_perc_voter_turnout_race)
 
 # plot average voter turnout rates by race via bar chart
 voter_turnout_race_bar <- ggplot(census_votes_clean_category2, aes(x = race_code, y = `Voter Turnout (%):`)) +
@@ -258,7 +258,7 @@ vote_high_inc_point <- ggplot(data = census_votes_clean_category2, aes( x = `Vot
 
 # in counties where there's a higher proportion of people of color, is voter turnout higher/lower?
 poc_vote <- cor(census_votes_clean_category2$poc_perc, census_votes_clean_category2$`Voter Turnout (%):`)
-print(poc_vote)
+#print(poc_vote)
   # -0.1256031, negative correlation
 
 # scatter plot of proportion of POC vs. voter turnout
@@ -272,7 +272,7 @@ poc_perc_voter_turnout_point <- ggplot(census_votes_clean_category2, aes(x = poc
 
 # in counties where there's a higher proportion of african americans, is voter turnout higher/lower?
 afr_amr_vote <- cor(census_votes_clean_category2$afr_amr_perc, census_votes_clean_category2$`Voter Turnout (%):`)
-print(afr_amr_vote)
+#print(afr_amr_vote)
 # -0.1111298, negative correlation
 
 # scatter plot of proportion of afr_amr vs. voter turnout
@@ -307,12 +307,12 @@ census_votes_clean_category3 <- census_votes_clean_category1 %>%
   mutate(poc_perc = poc_tally / race_tally) %>% 
   # total percent of african american household populations (perc. of households), census
   mutate(afr_amr_perc = afr_amr / race_tally)
-View(census_votes_clean_category3)
+#view(census_votes_clean_category3)
 
 # model using registered voters and number of voters:
 logistic <- census_votes_clean_category3 %>% 
-  mutate(nonvoters = `Registered Voters:` - `Total\nVotes Cast:`) %>%  
-  rename(voters = `Total\nVotes Cast:`) %>% 
+  mutate(nonvoters = `Registered Voters:` - `Total\r\nVotes Cast:`) %>%  
+  rename(voters = `Total\r\nVotes Cast:`) %>% 
   mutate(black_pop = afr_amr / race_tally * 100) 
 
 # create dataset with the required columns
@@ -336,7 +336,7 @@ summary(fit)
 
 # install.packages("sjPlot")
 library(sjPlot)
-tab_model(fit,
+logistic <- tab_model(fit,
           dv.labels = "Logistic Regression",
           string.ci = "Conf. Int (95%)",
           string.p = "P-Value")
