@@ -24,6 +24,7 @@
 # inc_by_felony
 # disenf_by_county
 # inca_afr_amr_point
+# potential_voters
 
 #load in libraries
 library(sf)
@@ -450,6 +451,15 @@ disenf_by_county <- tm_shape(county_census_votes_corrections_sf) +
   # make several layered maps that you can toggle between
   tm_facets(as.layers = TRUE)
 print(disenf_by_county)
+
+# no. of potential voters
+legend_breaks2 <- c(0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1500, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000)
+tmap_mode("plot")
+potential_voters <- tm_shape(county_census_votes_corrections_sf) +
+  tm_polygons(alpha = 0.8, col = c('non_violent_inmates'), id = "NAME", breaks = legend_breaks2) +
+  # make several layered maps that you can toggle between
+  tm_facets(as.layers = TRUE)
+print(potential_voters)
 
 # relationship with no. people incarcerated and proprotion of people of color in TN counties
 inca_poc_point <-  ggplot(data = census_votes_corrections, aes( x = `Total #`, y = poc_tally)) +
