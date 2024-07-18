@@ -75,7 +75,7 @@ print(potential_voters)
 ```
 Based on the offense type of currently incarcerated individuals with felony convictions, Figure 3 estimates which counties would gain the most potential votes. As a reminder, the actual number of potential votes to be gained is much greater due to the fact that about 3/4 of disenfranchised individuals have already served their time. 
 
-Figure 4. Estimate of Released Individuals
+Figure 4. Estimate of Released Individuals by Felony Type
 ```{r, echo = FALSE, message = FALSE, warning = FALSE }
 # from poster_graphs
 print(p_released)
