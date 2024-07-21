@@ -311,8 +311,8 @@ census_votes_clean_category3 <- census_votes_clean_category1 %>%
 
 # model using registered voters and number of voters:
 logistic <- census_votes_clean_category3 %>% 
-  mutate(nonvoters = `Registered Voters:` - `Total\r\nVotes Cast:`) %>%  
-  rename(voters = `Total\r\nVotes Cast:`) %>% 
+  mutate(nonvoters = `Registered Voters:` - `Total\nVotes Cast:`) %>%  
+  rename(voters = `Total\nVotes Cast:`) %>% 
   mutate(black_pop = afr_amr / race_tally * 100) 
 
 # create dataset with the required columns
